@@ -1,0 +1,6 @@
+{
+  "name": "A25",
+  "description": "Bilateral Sourcing Corridor connecting premium North Macedonian clients with qualified trade candidates in the Balkans.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

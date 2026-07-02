@@ -1,0 +1,362 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@450;500;700;900&family=JetBrains+Mono:wght@200;300;400;500;650;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Off-scale color tokens used across the UI. Without these, classes like
+     text-zinc-650, border-zinc-150 or selection:bg-blue-650 resolve to nothing
+     and the intended subtle palette silently disappears. */
+  --color-zinc-150: #ececee;
+  --color-zinc-155: #eaeaec;
+  --color-zinc-405: #9d9da6;
+  --color-zinc-450: #898992;
+  --color-zinc-650: #494950;
+  --color-zinc-850: #1f1f22;
+
+  --color-blue-105: #d2e2fd;
+  --color-blue-650: #205be0;
+
+  --color-amber-105: #fde9a9;
+  --color-amber-605: #d77606;
+
+  --color-red-650: #cb2020;
+
+  /* Finer-grained shadow used by the digital "receipt" panels. */
+  --shadow-3xs: 0 1px 1px rgb(0 0 0 / 0.03);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Keep anchor targets (e.g. #contact-desk) clear of the sticky header. */
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    background-color: #f6f7f9;
+    /* Clip horizontal overflow from full-bleed decorative layers (aurora,
+       fixed edge photography) here on <body> rather than on an inner div —
+       the browser propagates a body's overflow to the viewport itself
+       instead of creating a second nested scroll container. Doing this on
+       an inner div instead breaks scrollIntoView()/anchor scrolling, since
+       overflow-x set to anything but visible forces overflow-y to compute
+       as "auto", silently turning that div into its own scroll context. */
+    overflow-x: clip;
+  }
+
+  /* Clear, consistent keyboard-focus ring without altering the resting look. */
+  :focus-visible {
+    outline: 2px solid var(--color-blue-650);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+/* ============================================================
+   NEXT-GEN ATMOSPHERE — particles, aurora, grain
+   ============================================================ */
+
+/* Slow-drifting aurora blobs behind everything */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.aurora::before,
+.aurora::after {
+  content: "";
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  will-change: transform;
+}
+.aurora::before {
+  width: 48vw;
+  height: 48vw;
+  left: -12vw;
+  top: -14vw;
+  background: radial-gradient(circle at center, rgba(37, 99, 235, 0.22), transparent 68%);
+  animation: aurora-drift-a 24s ease-in-out infinite alternate;
+}
+.aurora::after {
+  width: 42vw;
+  height: 42vw;
+  right: -10vw;
+  bottom: -12vw;
+  background: radial-gradient(circle at center, rgba(245, 158, 11, 0.18), transparent 68%);
+  animation: aurora-drift-b 30s ease-in-out infinite alternate;
+}
+
+/* A third, central wash to tie hero + accents together */
+.aurora-spot {
+  position: fixed;
+  top: 12%;
+  left: 50%;
+  width: 60vw;
+  height: 40vw;
+  transform: translateX(-50%);
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.10), transparent 70%);
+  filter: blur(60px);
+  animation: aurora-pulse 14s ease-in-out infinite;
+}
+
+@keyframes aurora-drift-a {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(8vw, 6vh) scale(1.18); }
+}
+@keyframes aurora-drift-b {
+  0%   { transform: translate(0, 0) scale(1.05); }
+  100% { transform: translate(-7vw, -5vh) scale(1.25); }
+}
+@keyframes aurora-pulse {
+  0%, 100% { opacity: 0.55; transform: translateX(-50%) scale(1); }
+  50%      { opacity: 0.9;  transform: translateX(-50%) scale(1.12); }
+}
+
+/* Site edge photography — pinned (fixed) to the left/right viewport edges for
+   the whole page, like the aurora layer. Fades to fully transparent well
+   before the centered max-w-7xl (1280px) content column, so the middle of
+   the site stays completely clean and only page content shows there. */
+.site-bg-img {
+  position: fixed;
+  top: 0;
+  height: 100vh;
+  width: clamp(140px, calc((100vw - 1280px) / 2 + 80px), 520px);
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  pointer-events: none;
+}
+.site-bg-img-left {
+  left: 0;
+  -webkit-mask-image: linear-gradient(to right, black 0%, black 10%, transparent 62%);
+  mask-image: linear-gradient(to right, black 0%, black 10%, transparent 62%);
+}
+.site-bg-img-right {
+  right: 0;
+  -webkit-mask-image: linear-gradient(to left, black 0%, black 10%, transparent 62%);
+  mask-image: linear-gradient(to left, black 0%, black 10%, transparent 62%);
+}
+.site-bg-img::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(1, 58, 99, 0.16);
+  mix-blend-mode: multiply;
+}
+@media (max-width: 900px) {
+  /* Not enough margin outside the content column on tablets for a real photo
+     strip — keep a slim accent instead of a jarring wide overlap. */
+  .site-bg-img { width: 90px; }
+}
+@media (max-width: 640px) {
+  .site-bg-img { display: none; }
+}
+
+/* Particle network canvas layer */
+.particle-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+
+/* Ultra-subtle film grain for texture */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ============================================================
+   MOTION UTILITIES
+   ============================================================ */
+
+/* Animated gradient text for the hero headline.
+   Brand palette: brighter near-black (#0d1b2a) base with deep-blue accents. */
+.text-gradient-animated {
+  background: linear-gradient(
+    100deg,
+    #0d1b2a 0%,
+    #01497c 16%,
+    #2c7da0 30%,
+    #61a5c2 44%,
+    #0d1b2a 58%,
+    #2c7da0 74%,
+    #468faf 88%,
+    #0d1b2a 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: gradient-pan 6s linear infinite;
+}
+
+/* Synced animated gradient for the blue top bar.
+   Same keyframe + duration as .text-gradient-animated so they cycle together. */
+.bar-animated {
+  background-image: linear-gradient(
+    100deg,
+    #013a63 0%,
+    #01497c 16%,
+    #2c7da0 32%,
+    #468faf 44%,
+    #013a63 58%,
+    #2c7da0 74%,
+    #2a6f97 88%,
+    #013a63 100%
+  );
+  background-size: 200% auto;
+  animation: gradient-pan 6s linear infinite;
+}
+@keyframes gradient-pan {
+  from { background-position: 0% center; }
+  to { background-position: -200% center; }
+}
+
+/* Glassmorphic surface */
+.card-glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+}
+
+/* Smooth lift on hover */
+.hover-lift {
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.45s ease;
+  will-change: transform;
+}
+.hover-lift:hover {
+  transform: translateY(-6px);
+}
+
+/* Floating idle motion (icons, badges) */
+.animate-float {
+  animation: float-y 6s ease-in-out infinite;
+}
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+/* Soft pulsing glow ring */
+.animate-glow-pulse {
+  animation: glow-pulse 3.4s ease-in-out infinite;
+}
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.0), 0 0 18px rgba(37, 99, 235, 0.16); }
+  50%      { box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.06), 0 0 28px rgba(37, 99, 235, 0.30); }
+}
+
+/* Shine sweep across buttons on hover */
+.btn-shine { position: relative; overflow: hidden; }
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 70%;
+  height: 100%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 255, 255, 0.45),
+    transparent
+  );
+  transform: skewX(-18deg);
+  transition: left 0.7s ease;
+}
+.btn-shine:hover::after { left: 140%; }
+
+/* Animated glow border for the dark contact panel */
+.panel-glow { position: relative; }
+.panel-glow::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(120deg, rgba(245,158,11,0.5), rgba(37,99,235,0.4), rgba(245,158,11,0.5));
+  background-size: 200% 200%;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.55;
+  animation: gradient-pan 6s linear infinite;
+  pointer-events: none;
+}
+
+/* Scroll-reveal entrance (driven by IntersectionObserver in App) */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Initial fade-up on load */
+.animate-fade-up {
+  animation: fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .aurora::before,
+  .aurora::after,
+  .aurora-spot,
+  .text-gradient-animated,
+  .bar-animated,
+  .animate-float,
+  .animate-glow-pulse,
+  .panel-glow::before,
+  .animate-fade-up {
+    animation: none !important;
+  }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .hover-lift { transition: none; }
+}
+
+/* Custom scrollbar config for technical loggers */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #000;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #18181b;
+  border-radius: 0px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #27272a;
+}
