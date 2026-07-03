@@ -2,7 +2,7 @@
 // server (server.ts) and the Vercel serverless function (api/chat-messages.ts).
 // The widget polls this while its panel is open to pick up owner replies.
 
-import { getConversation } from "./chatStore";
+import { getConversation } from "./chatStore.js";
 
 export async function processGetChatMessages(req: any, res: any) {
   const conversationId = req.query?.conversationId;

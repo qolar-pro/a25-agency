@@ -2,10 +2,10 @@ import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import dotenv from "dotenv";
-import { processSubmission } from "./lib/submission";
-import { processChatMessage } from "./lib/chatWidget";
-import { processGetChatMessages } from "./lib/chatMessages";
-import { processTelegramWebhook } from "./lib/chatReplyWebhook";
+import { processSubmission } from "./lib/submission.js";
+import { processChatMessage } from "./lib/chatWidget.js";
+import { processGetChatMessages } from "./lib/chatMessages.js";
+import { processTelegramWebhook } from "./lib/chatReplyWebhook.js";
 
 // Load environment variables
 dotenv.config();

@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { processChatMessage } from "../lib/chatWidget";
+import { processChatMessage } from "../lib/chatWidget.js";
 
 // Vercel serverless function: POST /api/chat
 // Vercel parses the JSON body into req.body automatically; the shared

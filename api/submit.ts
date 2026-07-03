@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { processSubmission } from "../lib/submission";
+import { processSubmission } from "../lib/submission.js";
 
 // Vercel serverless function: POST /api/submit
 // Vercel parses the JSON body into req.body automatically; the shared

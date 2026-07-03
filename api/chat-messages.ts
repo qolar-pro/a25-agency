@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { processGetChatMessages } from "../lib/chatMessages";
+import { processGetChatMessages } from "../lib/chatMessages.js";
 
 // Vercel serverless function: GET /api/chat-messages?conversationId=...
 // Polled by the chat widget while its panel is open.

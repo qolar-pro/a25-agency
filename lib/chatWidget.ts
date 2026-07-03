@@ -14,7 +14,7 @@ import {
   createConversation,
   appendMessage,
   recordTelegramMessageMapping
-} from "./chatStore";
+} from "./chatStore.js";
 
 export async function processChatMessage(req: any, res: any) {
   const { conversationId, name, email, message } = req.body ?? {};

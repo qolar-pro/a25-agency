@@ -8,8 +8,8 @@
 // reply), an unmatched reply, or an email-send failure are all silently
 // no-op'd rather than surfaced as webhook errors.
 
-import { getConversationIdByTelegramMessageId, appendMessage, getConversation } from "./chatStore";
-import { sendEmailViaResend } from "./email";
+import { getConversationIdByTelegramMessageId, appendMessage, getConversation } from "./chatStore.js";
+import { sendEmailViaResend } from "./email.js";
 
 export async function processTelegramWebhook(req: any, res: any) {
   const replyToId = req.body?.message?.reply_to_message?.message_id;

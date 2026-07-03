@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { processTelegramWebhook } from "../lib/chatReplyWebhook";
+import { processTelegramWebhook } from "../lib/chatReplyWebhook.js";
 
 // Vercel serverless function: POST /api/telegram-webhook
 // Registered with Telegram via setWebhook once this is deployed with a real
