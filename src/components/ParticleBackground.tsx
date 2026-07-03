@@ -10,7 +10,7 @@ interface Particle {
 }
 
 /**
- * An interactive "connection network" β€” drifting nodes linked by lines that
+ * An interactive "connection network" — drifting nodes linked by lines that
  * brighten near the cursor. Thematically fits A25: connecting people across
  * borders. Purely decorative; fixed behind all content, pointer-events: none.
  */
