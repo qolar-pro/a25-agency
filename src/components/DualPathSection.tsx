@@ -50,35 +50,35 @@ export default function DualPathSection({ language, onOpenRequest, onOpenApply }
       return {
         status: 'WARNING',
         bg: 'bg-amber-50 border-amber-200 text-amber-800',
-        title: language === 'EN' ? 'REDUCED TRANSIT PRIORITY' : language === 'MK' ? 'НАМАЛЕН ТРАНЗИТЕН ПРИОРИТЕТ' : 'PRIORITET I REDUKTUAR',
+        title: language === 'EN' ? 'REDUCED TRANSIT PRIORITY' : language === 'MK' ? 'ΠΠΠΠΠ›Π•Π ΠΆΠ ΠΠΠ—ΠΠΆΠ•Π ΠΠ ΠΠΠ ΠΠΆΠ•ΠΆ' : 'PRIORITET I REDUKTUAR',
         description: language === 'EN' 
           ? 'Biometric passport is essential for rapid bi-lateral processing. Acquire passport to unlock instant deployment.' 
           : language === 'MK' 
-          ? 'Биометрискиот пасош е услов за брз транзит без препреки. Обезбедете пасош пред аплицирање.' 
-          : 'Pasaporta biometrike është thelbësore për procesim të shpejtë.'
+          ? 'Π‘ΠΈΠΎΠΌΠµΡ‚Ρ€ΠΈΡΠΊΠΈΠΎΡ‚ ΠΏΠ°ΡΠΎΡ Πµ ΡƒΡΠ»ΠΎΠ² Π·Π° Π±Ρ€Π· Ρ‚Ρ€Π°Π½Π·ΠΈΡ‚ Π±ΠµΠ· ΠΏΡ€ΠµΠΏΡ€ΠµΠΊΠΈ. ΠΠ±ΠµΠ·Π±ΠµΠ΄ΠµΡ‚Πµ ΠΏΠ°ΡΠΎΡ ΠΏΡ€ΠµΠ΄ Π°ΠΏΠ»ΠΈΡ†ΠΈΡ€Π°ΡΠµ.' 
+          : 'Pasaporta biometrike Γ«shtΓ« thelbΓ«sore pΓ«r procesim tΓ« shpejtΓ«.'
       };
     }
     if (eligExperience < 1) {
       return {
         status: 'INFO',
         bg: 'bg-blue-50 border-blue-200 text-blue-800',
-        title: language === 'EN' ? 'TRAINING PROTOCOL MANDATED' : language === 'MK' ? 'ЗАДОЛЖИТЕЛНА ПРАКТИЧНА ОБУКА' : 'TRAJNIM I DETYRUESHËM',
+        title: language === 'EN' ? 'TRAINING PROTOCOL MANDATED' : language === 'MK' ? 'Π—ΠΠ”ΠΠ›Π–ΠΠΆΠ•Π›ΠΠ ΠΠ ΠΠΠΆΠΠ§ΠΠ ΠΠ‘Π£ΠΠ' : 'TRAJNIM I DETYRUESHΓ‹M',
         description: language === 'EN'
           ? 'Approved for junior assistant contracts with client-funded onsite adaptation modules.'
           : language === 'MK'
-          ? 'Одобрено за почетни договори со бесплатна пробна практична обука обезбедена кај вашиот работодавец.'
-          : 'Aprovuar për kontrata fillestare me trajnim të paguar në terren.'
+          ? 'ΠΠ΄ΠΎΠ±Ρ€ΠµΠ½ΠΎ Π·Π° ΠΏΠΎΡ‡ΠµΡ‚Π½ΠΈ Π΄ΠΎΠ³ΠΎΠ²ΠΎΡ€ΠΈ ΡΠΎ Π±ΠµΡΠΏΠ»Π°Ρ‚Π½Π° ΠΏΡ€ΠΎΠ±Π½Π° ΠΏΡ€Π°ΠΊΡ‚ΠΈΡ‡Π½Π° ΠΎΠ±ΡƒΠΊΠ° ΠΎΠ±ΠµΠ·Π±ΠµΠ΄ΠµΠ½Π° ΠΊΠ°Ρ Π²Π°ΡΠΈΠΎΡ‚ Ρ€Π°Π±ΠΎΡ‚ΠΎΠ΄Π°Π²ΠµΡ†.'
+          : 'Aprovuar pΓ«r kontrata fillestare me trajnim tΓ« paguar nΓ« terren.'
       };
     }
     return {
       status: 'OPTIMAL',
       bg: 'bg-emerald-50 border-emerald-200 text-emerald-800',
-      title: language === 'EN' ? 'OPTIMAL ELIGIBLE STATUS' : language === 'MK' ? 'ИЗВОНРЕДЕН СТАТУС: ИСПОЛНУВА УСЛОВИ' : 'STATUS MAKSIMAL: I PRANUESHËM',
+      title: language === 'EN' ? 'OPTIMAL ELIGIBLE STATUS' : language === 'MK' ? 'ΠΠ—Π’ΠΠΠ Π•Π”Π•Π Π΅ΠΆΠΠΆΠ£Π΅: ΠΠ΅ΠΠΠ›ΠΠ£Π’Π Π£Π΅Π›ΠΠ’Π' : 'STATUS MAKSIMAL: I PRANUESHΓ‹M',
       description: language === 'EN'
         ? 'Instant transit capabilities unlocked. Profile matches current high-urgency employer quotas in North Macedonia.'
         : language === 'MK'
-        ? 'Целосно исполнети квалификации. Вашиот профил се совпаѓа со активните отворени квоти кај нашите партнери.'
-        : 'Kualifikim i plotë. Profili juaj përputhet me kuotat urgjente aktuale.'
+        ? 'Π¦ΠµΠ»ΠΎΡΠ½ΠΎ ΠΈΡΠΏΠΎΠ»Π½ΠµΡ‚ΠΈ ΠΊΠ²Π°Π»ΠΈΡ„ΠΈΠΊΠ°Ρ†ΠΈΠΈ. Π’Π°ΡΠΈΠΎΡ‚ ΠΏΡ€ΠΎΡ„ΠΈΠ» ΡΠµ ΡΠΎΠ²ΠΏΠ°Ρ“Π° ΡΠΎ Π°ΠΊΡ‚ΠΈΠ²Π½ΠΈΡ‚Πµ ΠΎΡ‚Π²ΠΎΡ€ΠµΠ½ΠΈ ΠΊΠ²ΠΎΡ‚ΠΈ ΠΊΠ°Ρ Π½Π°ΡΠΈΡ‚Πµ ΠΏΠ°Ρ€Ρ‚Π½ΠµΡ€ΠΈ.'
+        : 'Kualifikim i plotΓ«. Profili juaj pΓ«rputhet me kuotat urgjente aktuale.'
     };
   }, [eligPassport, eligExperience, eligSector, language]);
 
@@ -93,17 +93,17 @@ export default function DualPathSection({ language, onOpenRequest, onOpenApply }
     <section id="calculator-section" className="relative py-24 px-4 sm:px-6 lg:px-8 bg-white border-b border-zinc-200 overflow-hidden text-left">
       
       {/* Subtle light decoration */}
-      <div className="absolute top-0 right-0 w-1/3 h-full bg-[radial-gradient(ellipse_at_top_right,rgba(59,130,246,0.03),transparent_60%)] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-1/3 h-full bg-[radial-gradient(ellipse_at_top_right,rgba(31,81,255,0.03),transparent_60%)] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto">
         
         {/* Section Header */}
         <div className="border-b border-zinc-200 pb-8 mb-16">
           <span className="text-xs font-mono text-blue-600 tracking-[0.3em] uppercase block mb-2 font-bold">
-            {language === 'EN' ? 'INTERACTIVE MATRIX' : 'ИНТЕРАКТИВЕН ПАНЕЛ'}: [03]
+            {language === 'EN' ? 'INTERACTIVE MATRIX' : 'ΠΠΠΆΠ•Π ΠΠΠΆΠΠ’Π•Π ΠΠΠΠ•Π›'}: [03]
           </span>
           <h2 className="text-3xl sm:text-5xl font-display font-black text-zinc-900 uppercase">
-            {language === 'EN' ? 'Estimators & Compliance' : language === 'MK' ? 'Проценка & Калкулатор' : 'Statistikat & Konformiteti'}
+            {language === 'EN' ? 'Estimators & Compliance' : language === 'MK' ? 'ΠΡ€ΠΎΡ†ΠµΠ½ΠΊΠ° & ΠΠ°Π»ΠΊΡƒΠ»Π°Ρ‚ΠΎΡ€' : 'Statistikat & Konformiteti'}
           </h2>
         </div>
 
@@ -118,7 +118,7 @@ export default function DualPathSection({ language, onOpenRequest, onOpenApply }
             }`}
           >
             <Calculator className="w-4 h-4 text-blue-600" />
-            {language === 'EN' ? 'For Macedonian Companies' : 'За Клиенти (Претпријатија)'}
+            {language === 'EN' ? 'For Macedonian Companies' : 'Π—Π° ΠΠ»ΠΈΠµΠ½Ρ‚ΠΈ (ΠΡ€ΠµΡ‚ΠΏΡ€ΠΈΡΠ°Ρ‚ΠΈΡΠ°)'}
           </button>
           
           <button
@@ -130,7 +130,7 @@ export default function DualPathSection({ language, onOpenRequest, onOpenApply }
             }`}
           >
             <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            {language === 'EN' ? 'For Candidates & Workers' : 'За Кандидати (Работници)'}
+            {language === 'EN' ? 'For Candidates & Workers' : 'Π—Π° ΠΠ°Π½Π΄ΠΈΠ΄Π°Ρ‚ΠΈ (Π Π°Π±ΠΎΡ‚Π½ΠΈΡ†ΠΈ)'}
           </button>
         </div>
 
@@ -149,15 +149,15 @@ export default function DualPathSection({ language, onOpenRequest, onOpenApply }
               <div className="lg:col-span-6 space-y-8">
                 <div className="space-y-4">
                   <span className="text-[10px] font-mono text-blue-600 block font-bold uppercase">
-                    {language === 'EN' ? 'FINANCIAL SAVINGS PROJECT' : 'ЕКОНОМСКА ОПТИМИЗАЦИЈА'}
+                    {language === 'EN' ? 'FINANCIAL SAVINGS PROJECT' : 'Π•ΠΠΠΠΠΠ΅ΠΠ ΠΠΠΆΠΠΠΠ—ΠΠ¦ΠΠΠ'}
                   </span>
                   <h3 className="text-2xl sm:text-4xl font-black text-zinc-900 tracking-tight font-display">
-                    {language === 'EN' ? 'Optimize your operating margins.' : 'Оптимизирајте ги трошоците за кадар.'}
+                    {language === 'EN' ? 'Optimize your operating margins.' : 'ΠΠΏΡ‚ΠΈΠΌΠΈΠ·ΠΈΡ€Π°ΡΡ‚Πµ Π³ΠΈ Ρ‚Ρ€ΠΎΡΠΎΡ†ΠΈΡ‚Πµ Π·Π° ΠΊΠ°Π΄Π°Ρ€.'}
                   </h3>
                   <p className="text-sm sm:text-base text-zinc-600 font-sans max-w-xl leading-relaxed">
                     {language === 'EN'
                       ? 'Reduce high domestic recruitment overheads. By hiring legal, certified South Balkan workers with pre-vetted qualifications, you get high retention and immediate operational stability.'
-                      : 'Добијте искусни работници од јужниот Балкан без долги чекања. Сите кандидати се претходно селектирани и подготвени за брз почеток.'}
+                      : 'Π”ΠΎΠ±ΠΈΡΡ‚Πµ ΠΈΡΠΊΡƒΡΠ½ΠΈ Ρ€Π°Π±ΠΎΡ‚Π½ΠΈΡ†ΠΈ ΠΎΠ΄ ΡΡƒΠ¶Π½ΠΈΠΎΡ‚ Π‘Π°Π»ΠΊΠ°Π½ Π±ΠµΠ· Π΄ΠΎΠ»Π³ΠΈ Ρ‡ΠµΠΊΠ°ΡΠ°. Π΅ΠΈΡ‚Πµ ΠΊΠ°Π½Π΄ΠΈΠ΄Π°Ρ‚ΠΈ ΡΠµ ΠΏΡ€ΠµΡ‚Ρ…ΠΎΠ΄Π½ΠΎ ΡΠµΠ»ΠµΠΊΡ‚ΠΈΡ€Π°Π½ΠΈ ΠΈ ΠΏΠΎΠ΄Π³ΠΎΡ‚Π²ΠµΠ½ΠΈ Π·Π° Π±Ρ€Π· ΠΏΠΎΡ‡ΠµΡ‚ΠΎΠΊ.'}
                   </p>
                 </div>
 
@@ -180,7 +180,7 @@ export default function DualPathSection({ language, onOpenRequest, onOpenApply }
                     onClick={scrollToContact}
                     className="px-6 py-3.5 bg-blue-600 hover:bg-blue-700 font-mono text-xs text-white font-bold tracking-wide uppercase transition-all rounded shadow-sm hover:shadow"
                   >
-                    {language === 'EN' ? 'Request Sourcing Call' : 'Побарајте кадар сега'}
+                    {language === 'EN' ? 'Request Sourcing Call' : 'ΠΠΎΠ±Π°Ρ€Π°ΡΡ‚Πµ ΠΊΠ°Π΄Π°Ρ€ ΡΠµΠ³Π°'}
                   </button>
                 </div>
               </div>
@@ -189,10 +189,10 @@ export default function DualPathSection({ language, onOpenRequest, onOpenApply }
               <div className="lg:col-span-6 bg-white border border-zinc-200 p-6 sm:p-8 space-y-6 rounded-2xl shadow-sm">
                 <div>
                   <h4 className="text-xs font-mono text-blue-600 uppercase tracking-widest mb-1 font-bold">
-                    {language === 'EN' ? 'MANAGEMENT SAVINGS ESTIMATOR' : 'ПРОЕКЦИЈА НА ЗАШТЕДА НА ТРОШОЦИ'}
+                    {language === 'EN' ? 'MANAGEMENT SAVINGS ESTIMATOR' : 'ΠΠ ΠΠ•ΠΠ¦ΠΠΠ ΠΠ Π—ΠΠ¨ΠΆΠ•Π”Π ΠΠ ΠΆΠ ΠΠ¨ΠΠ¦Π'}
                   </h4>
                   <p className="text-xs text-zinc-500 font-mono">
-                    {language === 'EN' ? 'Adjust parameters below to model optimization.' : 'Прилагодете ги слајдерите за проценка во реално време.'}
+                    {language === 'EN' ? 'Adjust parameters below to model optimization.' : 'ΠΡ€ΠΈΠ»Π°Π³ΠΎΠ΄ΠµΡ‚Πµ Π³ΠΈ ΡΠ»Π°ΡΠ΄ΠµΡ€ΠΈΡ‚Πµ Π·Π° ΠΏΡ€ΠΎΡ†ΠµΠ½ΠΊΠ° Π²ΠΎ Ρ€ΠµΠ°Π»Π½ΠΎ Π²Ρ€ΠµΠΌΠµ.'}
                   </p>
                 </div>
 
@@ -202,7 +202,7 @@ export default function DualPathSection({ language, onOpenRequest, onOpenApply }
                   {/* Sector selection inside calc */}
                   <div className="space-y-2">
                     <label className="block text-[10px] font-mono text-zinc-500 uppercase font-bold">
-                      {language === 'EN' ? 'INDUSTRY BRANCH' : 'ИНДУСТРИСКИ СЕКТОР'}
+                      {language === 'EN' ? 'INDUSTRY BRANCH' : 'ΠΠΠ”Π£Π΅ΠΆΠ ΠΠ΅ΠΠ Π΅Π•ΠΠΆΠΠ '}
                     </label>
                     <div className="grid grid-cols-3 gap-2">
                       {['construction', 'manufacturing', 'hospitality'].map((sectorId) => (
@@ -247,7 +247,7 @@ export default function DualPathSection({ language, onOpenRequest, onOpenApply }
                   <div className="space-y-2">
                     <div className="flex justify-between text-xs font-mono">
                       <span className="text-zinc-600 font-medium">CONTRACT LENGTH</span>
-                      <span className="text-zinc-900 font-bold">{calcMonths} {language === 'EN' ? 'Months' : 'месеци'}</span>
+                      <span className="text-zinc-900 font-bold">{calcMonths} {language === 'EN' ? 'Months' : 'ΠΌΠµΡΠµΡ†ΠΈ'}</span>
                     </div>
                     <input
                       type="range"
@@ -270,10 +270,10 @@ export default function DualPathSection({ language, onOpenRequest, onOpenApply }
                   <div className="flex justify-between items-end">
                     <div>
                       <span className="block text-[10px] font-mono text-zinc-500 uppercase font-bold">
-                        {language === 'EN' ? 'PROJECTED OVERHEAD SAVED' : 'ПРОЦЕНЕТА СУМА ЗА ЗАШТЕДА'}
+                        {language === 'EN' ? 'PROJECTED OVERHEAD SAVED' : 'ΠΠ ΠΠ¦Π•ΠΠ•ΠΆΠ Π΅Π£ΠΠ Π—Π Π—ΠΠ¨ΠΆΠ•Π”Π'}
                       </span>
                       <span className="text-3xl font-black text-emerald-600 tracking-tight font-sans">
-                        €{calculatedSavings.toLocaleString()}
+                        β‚¬{calculatedSavings.toLocaleString()}
                       </span>
                     </div>
                     <div className="text-right">
@@ -285,7 +285,7 @@ export default function DualPathSection({ language, onOpenRequest, onOpenApply }
                   <p className="text-[10px] font-mono text-zinc-400 leading-normal border-t border-zinc-200 pt-3">
                     {language === 'EN' 
                     ? '*Compares average direct cost optimizations like recruiting Agency fees, legal documentation filings, housing contracts and travel insurance.'
-                    : '*Пресметано со просечните заштеди за агенциски посредувања, правни документи и организиран превоз.'}
+                    : '*ΠΡ€ΠµΡΠΌΠµΡ‚Π°Π½ΠΎ ΡΠΎ ΠΏΡ€ΠΎΡΠµΡ‡Π½ΠΈΡ‚Πµ Π·Π°ΡΡ‚ΠµΠ΄ΠΈ Π·Π° Π°Π³ΠµΠ½Ρ†ΠΈΡΠΊΠΈ ΠΏΠΎΡΡ€ΠµΠ΄ΡƒΠ²Π°ΡΠ°, ΠΏΡ€Π°Π²Π½ΠΈ Π΄ΠΎΠΊΡƒΠΌΠµΠ½Ρ‚ΠΈ ΠΈ ΠΎΡ€Π³Π°Π½ΠΈΠ·ΠΈΡ€Π°Π½ ΠΏΡ€ΠµΠ²ΠΎΠ·.'}
                   </p>
                 </div>
               </div>
@@ -303,15 +303,15 @@ export default function DualPathSection({ language, onOpenRequest, onOpenApply }
               <div className="lg:col-span-6 space-y-8">
                 <div className="space-y-4">
                   <span className="text-[10px] font-mono text-emerald-600 block font-bold uppercase">
-                    {language === 'EN' ? 'WORKER GUARANTEES' : 'ГАРАНТИРАНИ ПРАВА ЗА РАБОТНИЦИТЕ'}
+                    {language === 'EN' ? 'WORKER GUARANTEES' : 'Π“ΠΠ ΠΠΠΆΠΠ ΠΠΠ ΠΠ ΠΠ’Π Π—Π Π ΠΠ‘ΠΠΆΠΠΠ¦ΠΠΆΠ•'}
                   </span>
                   <h3 className="text-2xl sm:text-4xl font-black text-zinc-900 font-display">
-                    {language === 'EN' ? 'Safe and legal jobs in North Macedonia.' : 'Сигурна и 100% легална сезонска или постојана работа.'}
+                    {language === 'EN' ? 'Safe and legal jobs in North Macedonia.' : 'Π΅ΠΈΠ³ΡƒΡ€Π½Π° ΠΈ 100% Π»ΠµΠ³Π°Π»Π½Π° ΡΠµΠ·ΠΎΠ½ΡΠΊΠ° ΠΈΠ»ΠΈ ΠΏΠΎΡΡ‚ΠΎΡΠ°Π½Π° Ρ€Π°Π±ΠΎΡ‚Π°.'}
                   </h3>
                   <p className="text-sm sm:text-base text-zinc-600 font-sans leading-relaxed">
                     {language === 'EN'
                       ? 'Secure your future. Every position we offer includes an official work permit, full medical health coverage, bi-annual travel tickets, and comfortable modern housing options provided free by the client.'
-                      : 'Обезбедете си стабилна иднина. Секој ангажман вклучува комплетни документи, сигурни договори, платено здравствено осигурување и уредно уредено градско сместување.'}
+                      : 'ΠΠ±ΠµΠ·Π±ΠµΠ΄ΠµΡ‚Πµ ΡΠΈ ΡΡ‚Π°Π±ΠΈΠ»Π½Π° ΠΈΠ΄Π½ΠΈΠ½Π°. Π΅ΠµΠΊΠΎΡ Π°Π½Π³Π°Π¶ΠΌΠ°Π½ Π²ΠΊΠ»ΡƒΡ‡ΡƒΠ²Π° ΠΊΠΎΠΌΠΏΠ»ΠµΡ‚Π½ΠΈ Π΄ΠΎΠΊΡƒΠΌΠµΠ½Ρ‚ΠΈ, ΡΠΈΠ³ΡƒΡ€Π½ΠΈ Π΄ΠΎΠ³ΠΎΠ²ΠΎΡ€ΠΈ, ΠΏΠ»Π°Ρ‚ΠµΠ½ΠΎ Π·Π΄Ρ€Π°Π²ΡΡ‚Π²ΠµΠ½ΠΎ ΠΎΡΠΈΠ³ΡƒΡ€ΡƒΠ²Π°ΡΠµ ΠΈ ΡƒΡ€ΠµΠ΄Π½ΠΎ ΡƒΡ€ΠµΠ΄ΠµΠ½ΠΎ Π³Ρ€Π°Π΄ΡΠΊΠΎ ΡΠΌΠµΡΡ‚ΡƒΠ²Π°ΡΠµ.'}
                   </p>
                 </div>
 
@@ -319,14 +319,14 @@ export default function DualPathSection({ language, onOpenRequest, onOpenApply }
                   <div className="flex items-center gap-3 bg-zinc-50 border border-zinc-200 p-4 rounded-xl">
                     <Check className="w-5 h-5 text-emerald-650 shrink-0" />
                     <div>
-                      <strong className="text-zinc-900 block font-bold">{language === 'EN' ? '100% Free Accommodation' : 'Сосема бесплатно сместување'}</strong>
+                      <strong className="text-zinc-900 block font-bold">{language === 'EN' ? '100% Free Accommodation' : 'Π΅ΠΎΡΠµΠΌΠ° Π±ΠµΡΠΏΠ»Π°Ρ‚Π½ΠΎ ΡΠΌΠµΡΡ‚ΡƒΠ²Π°ΡΠµ'}</strong>
                       <span className="text-zinc-550 block text-[11px] mt-0.5">High-quality spaces with functional heating, cooking networks and direct coordinates.</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 bg-zinc-50 border border-zinc-200 p-4 rounded-xl">
                     <Check className="w-5 h-5 text-emerald-650 shrink-0" />
                     <div>
-                      <strong className="text-zinc-900 block font-bold">{language === 'EN' ? 'Consular Work Visas' : 'Официјални конзуларни визи'}</strong>
+                      <strong className="text-zinc-900 block font-bold">{language === 'EN' ? 'Consular Work Visas' : 'ΠΡ„ΠΈΡ†ΠΈΡΠ°Π»Π½ΠΈ ΠΊΠΎΠ½Π·ΡƒΠ»Π°Ρ€Π½ΠΈ Π²ΠΈΠ·ΠΈ'}</strong>
                       <span className="text-zinc-550 block text-[11px] mt-0.5">Fast-track processed straight with home country representatives.</span>
                     </div>
                   </div>
@@ -337,7 +337,7 @@ export default function DualPathSection({ language, onOpenRequest, onOpenApply }
                     onClick={scrollToContact}
                     className="px-6 py-3.5 bg-blue-650 hover:bg-blue-700 font-mono text-xs text-white font-bold tracking-wide uppercase transition-all rounded shadow"
                   >
-                    {language === 'EN' ? 'APPLY INSTANTLY NOW' : 'АПЛИЦИРАЈ ЗА РАБОТА'}
+                    {language === 'EN' ? 'APPLY INSTANTLY NOW' : 'ΠΠΠ›ΠΠ¦ΠΠ ΠΠ Π—Π Π ΠΠ‘ΠΠΆΠ'}
                   </button>
                 </div>
               </div>
@@ -346,10 +346,10 @@ export default function DualPathSection({ language, onOpenRequest, onOpenApply }
               <div className="lg:col-span-6 bg-white border border-zinc-200 p-6 sm:p-8 space-y-6 rounded-2xl shadow-sm">
                 <div>
                   <h4 className="text-xs font-mono text-emerald-650 uppercase tracking-widest mb-1 font-bold">
-                    {language === 'EN' ? 'AUTOMATIC STATUS EVALUATOR' : 'АВТОМАТСКА ЕВАЛУАЦИЈА НА АПЛИКАНТИ'}
+                    {language === 'EN' ? 'AUTOMATIC STATUS EVALUATOR' : 'ΠΠ’ΠΆΠΠΠΠΆΠ΅ΠΠ Π•Π’ΠΠ›Π£ΠΠ¦ΠΠΠ ΠΠ ΠΠΠ›ΠΠΠΠΠΆΠ'}
                   </h4>
                   <p className="text-xs text-zinc-500 font-mono">
-                    {language === 'EN' ? 'Check your deployment eligibility immediately.' : 'Одговорете на прашањата за да го проверите вашиот статус.'}
+                    {language === 'EN' ? 'Check your deployment eligibility immediately.' : 'ΠΠ΄Π³ΠΎΠ²ΠΎΡ€ΠµΡ‚Πµ Π½Π° ΠΏΡ€Π°ΡΠ°ΡΠ°Ρ‚Π° Π·Π° Π΄Π° Π³ΠΎ ΠΏΡ€ΠΎΠ²ΠµΡ€ΠΈΡ‚Πµ Π²Π°ΡΠΈΠΎΡ‚ ΡΡ‚Π°Ρ‚ΡƒΡ.'}
                   </p>
                 </div>
 

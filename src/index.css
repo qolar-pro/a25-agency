@@ -16,8 +16,21 @@
   --color-zinc-650: #494950;
   --color-zinc-850: #1f1f22;
 
-  --color-blue-105: #d2e2fd;
-  --color-blue-650: #205be0;
+  /* Brand blue palette — built around the two brand colors:
+     neon blue #1F51FF (primary accent) and navy #000080 (dark shade). */
+  --color-blue-50: #edf1ff;
+  --color-blue-100: #dbe3ff;
+  --color-blue-105: #d2dcff;
+  --color-blue-200: #b6c6ff;
+  --color-blue-300: #8ca6ff;
+  --color-blue-400: #5c81ff;
+  --color-blue-500: #4a73ff;
+  --color-blue-600: #1F51FF;
+  --color-blue-650: #1240e0;
+  --color-blue-700: #000080;
+  --color-blue-800: #000068;
+  --color-blue-900: #000052;
+  --color-blue-950: #00003d;
 
   --color-amber-105: #fde9a9;
   --color-amber-605: #d77606;
@@ -84,7 +97,7 @@
   height: 48vw;
   left: -12vw;
   top: -14vw;
-  background: radial-gradient(circle at center, rgba(37, 99, 235, 0.22), transparent 68%);
+  background: radial-gradient(circle at center, rgba(31, 81, 255, 0.22), transparent 68%);
   animation: aurora-drift-a 24s ease-in-out infinite alternate;
 }
 .aurora::after {
@@ -152,7 +165,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(1, 58, 99, 0.16);
+  background: rgba(0, 0, 128, 0.16);
   mix-blend-mode: multiply;
 }
 @media (max-width: 900px) {
@@ -190,18 +203,18 @@
    ============================================================ */
 
 /* Animated gradient text for the hero headline.
-   Brand palette: brighter near-black (#0d1b2a) base with deep-blue accents. */
+   Brand palette: navy (#000080) base with neon-blue (#1F51FF) accents. */
 .text-gradient-animated {
   background: linear-gradient(
     100deg,
-    #0d1b2a 0%,
-    #01497c 16%,
-    #2c7da0 30%,
-    #61a5c2 44%,
-    #0d1b2a 58%,
-    #2c7da0 74%,
-    #468faf 88%,
-    #0d1b2a 100%
+    #0a0a3c 0%,
+    #000080 16%,
+    #1F51FF 30%,
+    #4a73ff 44%,
+    #0a0a3c 58%,
+    #1F51FF 74%,
+    #2c5dff 88%,
+    #0a0a3c 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -216,14 +229,14 @@
 .bar-animated {
   background-image: linear-gradient(
     100deg,
-    #013a63 0%,
-    #01497c 16%,
-    #2c7da0 32%,
-    #468faf 44%,
-    #013a63 58%,
-    #2c7da0 74%,
-    #2a6f97 88%,
-    #013a63 100%
+    #000080 0%,
+    #1035c0 16%,
+    #1F51FF 32%,
+    #4a73ff 44%,
+    #000080 58%,
+    #1F51FF 74%,
+    #1035c0 88%,
+    #000080 100%
   );
   background-size: 200% auto;
   animation: gradient-pan 6s linear infinite;
@@ -265,8 +278,8 @@
   animation: glow-pulse 3.4s ease-in-out infinite;
 }
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.0), 0 0 18px rgba(37, 99, 235, 0.16); }
-  50%      { box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.06), 0 0 28px rgba(37, 99, 235, 0.30); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(31, 81, 255, 0.0), 0 0 18px rgba(31, 81, 255, 0.16); }
+  50%      { box-shadow: 0 0 0 4px rgba(31, 81, 255, 0.06), 0 0 28px rgba(31, 81, 255, 0.30); }
 }
 
 /* Shine sweep across buttons on hover */
@@ -297,7 +310,7 @@
   inset: -1px;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(120deg, rgba(245,158,11,0.5), rgba(37,99,235,0.4), rgba(245,158,11,0.5));
+  background: linear-gradient(120deg, rgba(245,158,11,0.5), rgba(31,81,255,0.4), rgba(245,158,11,0.5));
   background-size: 200% 200%;
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;

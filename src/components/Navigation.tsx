@@ -36,14 +36,14 @@ export default function Navigation({
         <div className="flex justify-between items-center h-20">
           
           {/* Logo Brand */}
-          <div className="flex flex-col cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <div className="flex items-center gap-2">
-              <span className="h-2.5 w-2.5 bg-blue-600 rounded-full" />
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+            <img src="/a25icon.jpeg" alt="A25 logo" className="h-11 w-auto rounded-md" />
+            <div className="flex flex-col">
               <span className="font-display text-sm font-bold text-zinc-900 tracking-wider">VANGUARD BALKAN</span>
+              <span className="text-[10px] text-zinc-500 font-mono tracking-wide uppercase font-light">
+                {language === 'EN' ? 'Bilateral Sourcing Agency' : language === 'MK' ? 'Агенција за човечки ресурси' : 'Agjenci e Burimeve Njerëzore'}
+              </span>
             </div>
-            <span className="text-[10px] text-zinc-500 font-mono tracking-wide uppercase font-light">
-              {language === 'EN' ? 'Bilateral Sourcing Agency' : language === 'MK' ? 'Агенција за човечки ресурси' : 'Agjenci e Burimeve Njerëzore'}
-            </span>
           </div>
 
           {/* Desktop Nav Actions */}

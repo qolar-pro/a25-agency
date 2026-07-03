@@ -105,6 +105,23 @@ export interface TranslationKeys {
   ownerDesk?: string;
   badgeDispatched?: string;
   badgeSubmitted?: string;
+  chatWidgetLauncherLabel?: string;
+  chatWidgetTitle?: string;
+  chatWidgetSubtitle?: string;
+  chatWidgetLabelName?: string;
+  chatWidgetLabelEmail?: string;
+  chatWidgetLabelMessage?: string;
+  chatWidgetPlaceholderName?: string;
+  chatWidgetPlaceholderEmail?: string;
+  chatWidgetPlaceholderMessage?: string;
+  chatWidgetSend?: string;
+  chatWidgetSending?: string;
+  chatWidgetSuccessTitle?: string;
+  chatWidgetSuccessDesc?: string;
+  chatWidgetErrorGeneric?: string;
+  chatWidgetClose?: string;
+  chatWidgetPlaceholderFollowup?: string;
+  chatWidgetOwnerLabel?: string;
 }
 
 export const LANGUAGE_DETAILS: Record<Language, { label: string; flag: string; native: string }> = {

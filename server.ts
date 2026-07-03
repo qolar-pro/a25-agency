@@ -3,12 +3,15 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 import dotenv from "dotenv";
 import { processSubmission } from "./lib/submission";
+import { processChatMessage } from "./lib/chatWidget";
+import { processGetChatMessages } from "./lib/chatMessages";
+import { processTelegramWebhook } from "./lib/chatReplyWebhook";
 
 // Load environment variables
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 // Body parsing middleware
 app.use(express.json());
@@ -17,6 +20,17 @@ app.use(express.json());
 // Shared handler lives in lib/submission.ts so the Vercel function
 // (api/submit.ts) and this dev server stay in sync.
 app.post("/api/submit", (req, res) => processSubmission(req, res));
+
+// API: Chat Widget Notification Route
+// Shared handler lives in lib/chatWidget.ts so the Vercel function
+// (api/chat.ts) and this dev server stay in sync.
+app.post("/api/chat", (req, res) => processChatMessage(req, res));
+
+// API: Chat Message Polling Route (widget polls this while its panel is open)
+app.get("/api/chat-messages", (req, res) => processGetChatMessages(req, res));
+
+// API: Telegram Webhook Route (owner replies land here once setWebhook is registered)
+app.post("/api/telegram-webhook", (req, res) => processTelegramWebhook(req, res));
 
 // Vite and static build server pipeline middleware configuration
 async function startServer() {

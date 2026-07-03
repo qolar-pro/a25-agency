@@ -10,7 +10,7 @@ interface Particle {
 }
 
 /**
- * An interactive "connection network" — drifting nodes linked by lines that
+ * An interactive "connection network" β€” drifting nodes linked by lines that
  * brighten near the cursor. Thematically fits A25: connecting people across
  * borders. Purely decorative; fixed behind all content, pointer-events: none.
  */
@@ -35,7 +35,7 @@ export default function ParticleBackground() {
     const tint = (hue: Particle['hue'], a: number) => {
       switch (hue) {
         case 'blue':
-          return `rgba(37, 99, 235, ${a})`;
+          return `rgba(31, 81, 255, ${a})`;
         case 'amber':
           return `rgba(217, 119, 6, ${a})`;
         default:
@@ -110,7 +110,7 @@ export default function ParticleBackground() {
         const md = Math.hypot(mdx, mdy);
         if (md < MOUSE_LINK) {
           const a = (1 - md / MOUSE_LINK) * 0.3;
-          ctx.strokeStyle = `rgba(37, 99, 235, ${a})`;
+          ctx.strokeStyle = `rgba(31, 81, 255, ${a})`;
           ctx.lineWidth = 0.9;
           ctx.beginPath();
           ctx.moveTo(p.x, p.y);

@@ -35,6 +35,7 @@ import { Language } from './types';
 import { LANGUAGE_DETAILS, getTranslations } from './translations';
 import ParticleBackground from './components/ParticleBackground';
 import HeroBackgroundImages from './components/HeroBackgroundImages';
+import ChatWidget from './components/ChatWidget';
 
 interface LedgerItem {
   id: string;
@@ -59,25 +60,25 @@ export default function App() {
   const getHelperText = (isOpen: boolean) => {
     switch (language) {
       case 'MK':
-        return isOpen ? 'Кликнете за затворање на формата' : 'Кликнете за отварање и пишување';
+        return isOpen ? 'Ξ ΒΞ Β»Ξ ΞΞ ΞΞ Β½Ξ ΒµΞ΅β€Ξ Βµ Ξ Β·Ξ Β° Ξ Β·Ξ Β°Ξ΅β€Ξ Β²Ξ ΞΞ΅β‚¬Ξ Β°Ξ΅ΒΞ Βµ Ξ Β½Ξ Β° Ξ΅β€Ξ ΞΞ΅β‚¬Ξ ΞΞ Β°Ξ΅β€Ξ Β°' : 'Ξ ΒΞ Β»Ξ ΞΞ ΞΞ Β½Ξ ΒµΞ΅β€Ξ Βµ Ξ Β·Ξ Β° Ξ ΞΞ΅β€Ξ Β²Ξ Β°Ξ΅β‚¬Ξ Β°Ξ΅ΒΞ Βµ Ξ Ξ Ξ ΞΞ ΞΞ΅ΒΞ΅Ζ’Ξ Β²Ξ Β°Ξ΅ΒΞ Βµ';
       case 'AL':
-        return isOpen ? 'Kliko për ta mbyllur formularin' : 'Kliko për ta hapur dhe shkruajtur';
+        return isOpen ? 'Kliko pΞ“Β«r ta mbyllur formularin' : 'Kliko pΞ“Β«r ta hapur dhe shkruajtur';
       case 'DE':
-        return isOpen ? 'Klicken Sie zum Einklappen' : 'Klicken Sie zum Öffnen und Schreiben';
+        return isOpen ? 'Klicken Sie zum Einklappen' : 'Klicken Sie zum Ξ“β€“ffnen und Schreiben';
       case 'IT':
         return isOpen ? 'Clicca per ridurre' : 'Clicca per aprire e scrivere';
       case 'FR':
-        return isOpen ? 'Cliquez pour réduire' : 'Cliquez pour ouvrir et écrire';
+        return isOpen ? 'Cliquez pour rΞ“Β©duire' : 'Cliquez pour ouvrir et Ξ“Β©crire';
       case 'ES':
         return isOpen ? 'Haga clic para colapsar' : 'Haga clic para abrir y escribir';
       case 'TR':
-        return isOpen ? 'Formu kapatmak için tıklayın' : 'Açmak ve yazmak için tıklayın';
+        return isOpen ? 'Formu kapatmak iΞ“Β§in tΞ”Β±klayΞ”Β±n' : 'AΞ“Β§mak ve yazmak iΞ“Β§in tΞ”Β±klayΞ”Β±n';
       case 'SR':
-        return isOpen ? 'Kliknite da zatvorite formu' : 'Kliknite da otvorite i pišete';
+        return isOpen ? 'Kliknite da zatvorite formu' : 'Kliknite da otvorite i piΞ•Ξ…ete';
       case 'BG':
-        return isOpen ? 'Кликнете за затваряне на формата' : 'Кликнете за отваряне и писане';
+        return isOpen ? 'Ξ ΒΞ Β»Ξ ΞΞ ΞΞ Β½Ξ ΒµΞ΅β€Ξ Βµ Ξ Β·Ξ Β° Ξ Β·Ξ Β°Ξ΅β€Ξ Β²Ξ Β°Ξ΅β‚¬Ξ΅ΒΞ Β½Ξ Βµ Ξ Β½Ξ Β° Ξ΅β€Ξ ΞΞ΅β‚¬Ξ ΞΞ Β°Ξ΅β€Ξ Β°' : 'Ξ ΒΞ Β»Ξ ΞΞ ΞΞ Β½Ξ ΒµΞ΅β€Ξ Βµ Ξ Β·Ξ Β° Ξ ΞΞ΅β€Ξ Β²Ξ Β°Ξ΅β‚¬Ξ΅ΒΞ Β½Ξ Βµ Ξ Ξ Ξ ΞΞ ΞΞ΅ΒΞ Β°Ξ Β½Ξ Βµ';
       case 'EL':
-        return isOpen ? 'Κάντε κλικ για σύμπτυξη' : 'Κάντε κλικ για άνοιγμα και εγγραφή';
+        return isOpen ? 'ΞΒΞΒ¬ΞΒ½Ξβ€ΞΒµ ΞΞΞΒ»ΞΞ‰ΞΞ ΞΒ³ΞΞ‰ΞΒ± ΞΖ’ΞΒΞΞΞβ‚¬Ξβ€Ξβ€¦ΞΞΞΒ·' : 'ΞΒΞΒ¬ΞΒ½Ξβ€ΞΒµ ΞΞΞΒ»ΞΞ‰ΞΞ ΞΒ³ΞΞ‰ΞΒ± ΞΒ¬ΞΒ½ΞΞΞΞ‰ΞΒ³ΞΞΞΒ± ΞΞΞΒ±ΞΞ‰ ΞΒµΞΒ³ΞΒ³ΞΒΞΒ±Ξβ€ ΞΒ®';
       default:
         return isOpen ? 'Click to collapse form' : 'Click to expand and begin writing';
     }
@@ -165,7 +166,7 @@ export default function App() {
           type: 'CANDIDATE',
           name: "Faton Berisha",
           subLabel: "Kosovo (Pristina Office)",
-          mainDetail: "6 Years • Welder / CNC Metal",
+          mainDetail: "6 Years Ξ²β‚¬Ξ† Welder / CNC Metal",
           timestamp: "1 hour ago"
         }
       ];
@@ -334,7 +335,7 @@ export default function App() {
           type: 'CANDIDATE',
           name: candFullName,
           subLabel: `${candCountry} (Intake)`,
-          mainDetail: `${candExperience} Yrs Exp • ${candSector}`,
+          mainDetail: `${candExperience} Yrs Exp Ξ²β‚¬Ξ† ${candSector}`,
           timestamp: "Just now"
         };
         const revisedLedger = [newEntry, ...ledger];
@@ -360,7 +361,7 @@ export default function App() {
         type: 'CANDIDATE',
         name: candFullName,
         subLabel: `${candCountry} (Local Intake)`,
-        mainDetail: `${candExperience} Yrs Exp • ${candSector}`,
+        mainDetail: `${candExperience} Yrs Exp Ξ²β‚¬Ξ† ${candSector}`,
         timestamp: "Just now"
       };
       const revisedLedger = [newEntry, ...ledger];
@@ -382,8 +383,8 @@ export default function App() {
   // Hero CTAs: jump straight to the relevant form and open it automatically
   const scrollToForm = (type: 'employer' | 'candidate') => {
     // The forms section fades in via scroll-triggered reveal (starts at
-    // opacity:0 / translated down). Jumping there immediately — before the
-    // user has ever scrolled near it — would land on a still-invisible
+    // opacity:0 / translated down). Jumping there immediately Ξ²β‚¬β€ before the
+    // user has ever scrolled near it Ξ²β‚¬β€ would land on a still-invisible
     // block, which looks like the click did nothing. Force it visible first.
     document.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-visible'));
 
@@ -394,7 +395,7 @@ export default function App() {
 
     // Defer the measurement/scroll by two frames so it runs after React has
     // committed the state update above and the browser has painted the
-    // reveal-class change — measuring immediately can read stale (pre-update)
+    // reveal-class change Ξ²β‚¬β€ measuring immediately can read stale (pre-update)
     // layout, which is what previously made this need a second click.
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -411,7 +412,7 @@ export default function App() {
     });
   };
 
-  // Industries carousel — placeholder sector cards (real logos/content to be
+  // Industries carousel Ξ²β‚¬β€ placeholder sector cards (real logos/content to be
   // swapped in later). Reuses the existing sector translation labels so all
   // 25 languages stay covered without new translation keys.
   const industries = [
@@ -446,8 +447,8 @@ export default function App() {
       <div className="relative z-10">
 
       {/* Absolute top regulatory micro banner */}
-      <div className="bar-animated bg-[#013a63] py-2.5 border-b border-[#012b49] text-center font-mono text-[11px] tracking-[0.15em] font-bold text-zinc-200 uppercase px-4">
-        ⚡ {t.badge}
+      <div className="bar-animated bg-[#000080] py-2.5 border-b border-[#00005c] text-center font-mono text-[11px] tracking-[0.15em] font-bold text-zinc-200 uppercase px-4">
+        Ξ²ΒΞ… {t.badge}
       </div>
 
       {/* Modern crisp sticky header */}
@@ -455,10 +456,11 @@ export default function App() {
         <div className="max-w-6xl 2xl:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 lg:h-20 flex items-center justify-between">
 
           <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <div className="h-9 w-12 rounded bg-zinc-950 flex items-center justify-center text-white font-mono font-extrabold text-xs tracking-tight border border-zinc-800 shadow-sm leading-none">
-              <span className="text-zinc-100">A</span>
-              <span className="text-amber-500 pb-0.5">25</span>
-            </div>
+            <img
+              src="/a25icon.jpeg"
+              alt="A25 logo"
+              className="h-9 lg:h-11 w-auto rounded border border-zinc-200 shadow-sm"
+            />
             <div>
               <span className="font-semibold text-zinc-950 tracking-wide text-base font-mono block leading-none">
                 {t.brand}
@@ -514,7 +516,7 @@ export default function App() {
 
             <a
               href="#contact-desk"
-              className="btn-shine hidden sm:inline-flex items-center gap-1.5 px-4 py-2 bg-[#014f86] hover:bg-[#013a63] text-white font-mono text-xs uppercase font-bold tracking-wider rounded transition-all"
+              className="btn-shine hidden sm:inline-flex items-center gap-1.5 px-4 py-2 bg-[#1F51FF] hover:bg-[#000080] text-white font-mono text-xs uppercase font-bold tracking-wider rounded transition-all"
             >
               <span>{t.directLine}</span>
               <ArrowRight className="w-3 h-3 text-zinc-300" />
@@ -568,13 +570,13 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 pt-4 reveal">
 
             {/* Corporate Clients Info Block */}
-            <div className="card-glass border border-zinc-200/70 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs hover:border-blue-300/70 hover:shadow-[0_24px_60px_rgba(37,99,235,0.10)] hover-lift group flex flex-col justify-between">
+            <div className="card-glass border border-zinc-200/70 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs hover:border-blue-300/70 hover:shadow-[0_24px_60px_rgba(31,81,255,0.10)] hover-lift group flex flex-col justify-between">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-mono text-blue-600 tracking-widest uppercase font-bold">
                     [01 // CLIENTS]
                   </span>
-                  <div className="p-2 bg-blue-50 rounded text-blue-700 transition-all duration-300 group-hover:scale-110 group-hover:shadow-[0_0_22px_rgba(37,99,235,0.35)] group-hover:bg-blue-100">
+                  <div className="p-2 bg-blue-50 rounded text-blue-700 transition-all duration-300 group-hover:scale-110 group-hover:shadow-[0_0_22px_rgba(31,81,255,0.35)] group-hover:bg-blue-100">
                     <Building2 className="w-5 h-5" />
                   </div>
                 </div>
@@ -615,7 +617,7 @@ export default function App() {
             </div>
 
             {/* Workforce & Candidate Pool Info Block */}
-            <div className="card-glass border border-zinc-200/70 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs hover:border-blue-300/70 hover:shadow-[0_24px_60px_rgba(37,99,235,0.10)] hover-lift group flex flex-col justify-between">
+            <div className="card-glass border border-zinc-200/70 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs hover:border-blue-300/70 hover:shadow-[0_24px_60px_rgba(31,81,255,0.10)] hover-lift group flex flex-col justify-between">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-mono text-blue-600 tracking-widest uppercase font-bold">
@@ -657,7 +659,7 @@ export default function App() {
 
           </div>
 
-          {/* Industries We Work With — centered auto-cycling postcard carousel */}
+          {/* Industries We Work With Ξ²β‚¬β€ centered auto-cycling postcard carousel */}
           <div className="reveal space-y-6">
             <div className="text-center max-w-2xl mx-auto">
               <span className="text-[10px] font-mono text-blue-600 tracking-widest uppercase font-bold block">
@@ -747,7 +749,7 @@ export default function App() {
         <section id="contact-desk" className="pt-6 border-t border-zinc-200 space-y-8">
 
           {/* Executive Direct Contact Hub Banner */}
-          <div className="panel-glow reveal relative overflow-hidden bg-gradient-to-br from-[#014f86] via-[#013a63] to-[#012b49] text-white rounded-2xl p-6 sm:p-8 shadow-xl border border-[#01497c]/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div className="panel-glow reveal relative overflow-hidden bg-gradient-to-br from-[#1035c0] via-[#000080] to-[#000052] text-white rounded-2xl p-6 sm:p-8 shadow-xl border border-[#1F51FF]/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="space-y-2 max-w-2xl">
               <span className="inline-flex items-center gap-1.5 bg-amber-500/10 text-amber-500 text-[9px] font-mono font-bold uppercase tracking-widest px-2.5 py-1 rounded border border-amber-500/20">
                 {t.secureLine}
@@ -782,7 +784,7 @@ export default function App() {
             {/* COLUMN A: LOOKING TO HIRE (Employer Form) */}
             <div className={`card-glass border transition-all duration-500 ease-out rounded-3xl overflow-hidden flex flex-col ${
               empFormOpen
-                ? "border-blue-500/35 shadow-[0_20px_50px_rgba(37,99,235,0.06)] ring-1 ring-blue-500/10"
+                ? "border-blue-500/35 shadow-[0_20px_50px_rgba(31,81,255,0.06)] ring-1 ring-blue-500/10"
                 : "border-zinc-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.02)] hover:border-zinc-300 hover:shadow-[0_12px_40px_rgb(0,0,0,0.04)]"
             }`}>
 
@@ -870,7 +872,7 @@ export default function App() {
                       >
                         <div className="flex items-center gap-2.5 text-emerald-800">
                           <div className="h-6 w-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold font-mono shadow-xs">
-                            ✓
+                            Ξ²Ββ€
                           </div>
                           <div>
                             <h4 className="font-mono text-xs font-black uppercase tracking-wider">{t.successTitle}</h4>
@@ -906,7 +908,7 @@ export default function App() {
 
                         {empInfoMessage && (
                           <div className="text-[10px] bg-white/90 p-3 rounded-lg border border-emerald-100 font-mono text-zinc-500 leading-normal flex items-start gap-2 shadow-3xs">
-                            <span className="shrink-0">⚠️</span>
+                            <span className="shrink-0">Ξ²ΒΒ ΞΏΞΒ</span>
                             <span>{empInfoMessage}</span>
                           </div>
                         )}
@@ -1056,7 +1058,7 @@ export default function App() {
 
                         {empInfoMessage && (
                           <p className="text-[10.5px] text-red-600 font-mono italic px-1 flex items-center gap-1.5">
-                            <span>⚠️</span> <span>{empInfoMessage}</span>
+                            <span>Ξ²ΒΒ ΞΏΞΒ</span> <span>{empInfoMessage}</span>
                           </p>
                         )}
 
@@ -1176,7 +1178,7 @@ export default function App() {
                       >
                         <div className="flex items-center gap-2.5 text-emerald-800">
                           <div className="h-6 w-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold font-mono shadow-xs">
-                            ✓
+                            Ξ²Ββ€
                           </div>
                           <div>
                             <h4 className="font-mono text-xs font-black uppercase tracking-wider">{t.successTitle}</h4>
@@ -1212,7 +1214,7 @@ export default function App() {
 
                         {candInfoMessage && (
                           <div className="text-[10px] bg-white/90 p-3 rounded-lg border border-emerald-100 font-mono text-zinc-500 leading-normal flex items-start gap-2 shadow-3xs">
-                            <span className="shrink-0">⚠️</span>
+                            <span className="shrink-0">Ξ²ΒΒ ΞΏΞΒ</span>
                             <span>{candInfoMessage}</span>
                           </div>
                         )}
@@ -1410,7 +1412,7 @@ export default function App() {
 
                         {candInfoMessage && (
                           <p className="text-[10.5px] text-red-650 font-mono italic px-1 flex items-center gap-1.5">
-                            <span>⚠️</span> <span>{candInfoMessage}</span>
+                            <span>Ξ²ΒΒ ΞΏΞΒ</span> <span>{candInfoMessage}</span>
                           </p>
                         )}
 
@@ -1444,17 +1446,16 @@ export default function App() {
 
       </main>
 
+      <ChatWidget language={language} />
+
       {/* Pristine Minimal Footer designed specifically for visual honesty */}
-      <footer className="bg-[#013a63] border-t border-[#012b49] mt-20 py-12 px-6 sm:px-10 lg:px-16 xl:px-24 shadow-inner">
+      <footer className="bg-[#000080] border-t border-[#00005c] mt-20 py-12 px-6 sm:px-10 lg:px-16 xl:px-24 shadow-inner">
         <div className="max-w-[1800px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 items-center justify-between text-center md:text-left font-mono text-xs text-zinc-300 font-bold uppercase tracking-wider">
 
           {/* Logo & Company details */}
           <div className="space-y-2 col-span-1">
             <div className="flex items-center justify-center md:justify-start gap-2.5">
-              <div className="h-7 w-10 rounded bg-zinc-950 flex items-center justify-center text-white font-mono font-extrabold text-xs tracking-tight border border-zinc-800 shadow-sm leading-none">
-                <span className="text-zinc-100">A</span>
-                <span className="text-amber-500 pb-0.5">25</span>
-              </div>
+              <img src="/a25icon.jpeg" alt="A25 logo" className="h-8 w-auto rounded shadow-sm" />
               <span className="text-white font-display tracking-widest text-sm">A25 WORKFORCE</span>
             </div>
             <span className="block text-[11px] text-zinc-300 font-normal normal-case pt-1 leading-relaxed">
@@ -1475,10 +1476,10 @@ export default function App() {
             <span className="text-white text-xs font-bold">BALKAN RECRUITMENT SITES</span>
             <div className="flex gap-2.5 md:justify-end text-zinc-300 text-[11px] font-bold uppercase">
               <span>SKOPJE</span>
-              <span>•</span>
+              <span>Ξ²β‚¬Ξ†</span>
               <span>NORTH MACEDONIA</span>
             </div>
-            <span className="block text-[11px] text-zinc-300 font-normal">© 2026 A25 Agency. All rights reserved.</span>
+            <span className="block text-[11px] text-zinc-300 font-normal">Ξ’Β© 2026 A25 Agency. All rights reserved.</span>
             <a
               href="https://blancographics.xyz"
               target="_blank"
