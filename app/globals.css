@@ -1,0 +1,8 @@
+/* Global stylesheet for the Next.js App Router build.
+ *
+ * The single source of truth for brand tokens, Tailwind directives, the
+ * Google Fonts import and every custom class still lives in src/index.css
+ * (as CLAUDE.md mandates). This file just bridges it into the Next.js
+ * layout so nothing had to be duplicated during the migration. Edit tokens
+ * in src/index.css, not here. */
+@import "../src/index.css";
