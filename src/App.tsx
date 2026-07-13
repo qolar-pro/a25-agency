@@ -418,9 +418,9 @@ export default function App() {
   const industries = [
     { key: 'construction', label: t.optConstruction, desc: t.industryDescConstruction || 'Skilled trade & site labor sourcing.', icon: HardHat, iconBg: 'bg-blue-50', iconColor: 'text-blue-600' },
     { key: 'hospitality', label: t.optHospitality, desc: t.industryDescHospitality || 'Hospitality & guest service staffing.', icon: UtensilsCrossed, iconBg: 'bg-amber-50', iconColor: 'text-amber-600' },
-    { key: 'agriculture', label: t.optAgriculture, desc: t.industryDescAgriculture || 'Seasonal & permanent field labor.', icon: Sprout, iconBg: 'bg-emerald-50', iconColor: 'text-emerald-600' },
+    { key: 'agriculture', label: t.optAgriculture, desc: t.industryDescAgriculture || 'Seasonal & permanent field labor.', icon: Sprout, iconBg: 'bg-blue-100', iconColor: 'text-blue-700' },
     { key: 'manufacturing', label: t.optManufacturing, desc: t.industryDescManufacturing || 'Warehouse & production line staffing.', icon: Warehouse, iconBg: 'bg-zinc-100', iconColor: 'text-zinc-700' },
-    { key: 'generic', label: t.optGeneric || 'Generic Workers', desc: t.industryDescGeneric || 'General labor for any role or site.', icon: Users, iconBg: 'bg-indigo-50', iconColor: 'text-indigo-600' },
+    { key: 'generic', label: t.optGeneric || 'Generic Workers', desc: t.industryDescGeneric || 'General labor for any role or site.', icon: Users, iconBg: 'bg-blue-200', iconColor: 'text-blue-800' },
   ];
   const [industryIndex, setIndustryIndex] = useState(0);
   const [industriesPaused, setIndustriesPaused] = useState(false);
@@ -447,7 +447,7 @@ export default function App() {
       <div className="relative z-10">
 
       {/* Absolute top regulatory micro banner */}
-      <div className="bar-animated bg-[#000080] py-2.5 border-b border-[#00005c] text-center font-mono text-[11px] tracking-[0.15em] font-bold text-zinc-200 uppercase px-4">
+      <div className="bar-animated bg-blue-700 py-2.5 border-b border-blue-800 text-center font-mono text-[11px] tracking-[0.15em] font-bold text-zinc-200 uppercase px-4">
         ⚡ {t.badge}
       </div>
 
@@ -516,7 +516,7 @@ export default function App() {
 
             <a
               href="#contact-desk"
-              className="btn-shine hidden sm:inline-flex items-center gap-1.5 px-4 py-2 bg-[#1F51FF] hover:bg-[#000080] text-white font-mono text-xs uppercase font-bold tracking-wider rounded transition-all"
+              className="btn-shine hidden sm:inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-mono text-xs uppercase font-bold tracking-wider rounded transition-all"
             >
               <span>{t.directLine}</span>
               <ArrowRight className="w-3 h-3 text-zinc-300" />
@@ -671,7 +671,8 @@ export default function App() {
             </div>
 
             <div
-              className="relative w-full"
+              className="relative w-full overflow-x-hidden"
+              style={{ touchAction: 'pan-y' }}
               onMouseEnter={() => setIndustriesPaused(true)}
               onMouseLeave={() => setIndustriesPaused(false)}
             >
@@ -749,7 +750,7 @@ export default function App() {
         <section id="contact-desk" className="pt-6 border-t border-zinc-200 space-y-8">
 
           {/* Executive Direct Contact Hub Banner */}
-          <div className="panel-glow reveal relative overflow-hidden bg-gradient-to-br from-[#1035c0] via-[#000080] to-[#000052] text-white rounded-2xl p-6 sm:p-8 shadow-xl border border-[#1F51FF]/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div className="panel-glow reveal relative overflow-hidden bg-gradient-to-br from-blue-650 via-blue-700 to-blue-900 text-white rounded-2xl p-6 sm:p-8 shadow-xl border border-blue-600/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="space-y-2 max-w-2xl">
               <span className="inline-flex items-center gap-1.5 bg-amber-500/10 text-amber-500 text-[9px] font-mono font-bold uppercase tracking-widest px-2.5 py-1 rounded border border-amber-500/20">
                 {t.secureLine}
@@ -1449,7 +1450,7 @@ export default function App() {
       <ChatWidget language={language} />
 
       {/* Pristine Minimal Footer designed specifically for visual honesty */}
-      <footer className="bg-[#000080] border-t border-[#00005c] mt-20 py-12 px-6 sm:px-10 lg:px-16 xl:px-24 shadow-inner">
+      <footer className="bg-blue-700 border-t border-blue-800 mt-20 py-12 px-6 sm:px-10 lg:px-16 xl:px-24 shadow-inner">
         <div className="max-w-[1800px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 items-center justify-between text-center md:text-left font-mono text-xs text-zinc-300 font-bold uppercase tracking-wider">
 
           {/* Logo & Company details */}

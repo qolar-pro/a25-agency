@@ -16,21 +16,22 @@
   --color-zinc-650: #494950;
   --color-zinc-850: #1f1f22;
 
-  /* Brand blue palette — built around the two brand colors:
-     neon blue #1F51FF (primary accent) and navy #000080 (dark shade). */
-  --color-blue-50: #edf1ff;
-  --color-blue-100: #dbe3ff;
-  --color-blue-105: #d2dcff;
-  --color-blue-200: #b6c6ff;
-  --color-blue-300: #8ca6ff;
-  --color-blue-400: #5c81ff;
-  --color-blue-500: #4a73ff;
-  --color-blue-600: #1F51FF;
-  --color-blue-650: #1240e0;
-  --color-blue-700: #000080;
-  --color-blue-800: #000068;
-  --color-blue-900: #000052;
-  --color-blue-950: #00003d;
+  /* Brand blue palette — built around the primary/CTA #2F2FE4 and the dark
+     navy → near-black range #162E93 → #080616, matched to the logo's actual
+     dominant color #0F0740 (verified by pixel-sampling a25icon.jpeg). */
+  --color-blue-50: #E2E5FD;
+  --color-blue-100: #D2D6FB;
+  --color-blue-105: #CDD0FA;
+  --color-blue-200: #B4B7F7;
+  --color-blue-300: #9294F2;
+  --color-blue-400: #6C6DED;
+  --color-blue-500: #4C4CE8;
+  --color-blue-600: #2F2FE4;
+  --color-blue-650: #252FC4;
+  --color-blue-700: #162E93;
+  --color-blue-800: #112067;
+  --color-blue-900: #0E1648;
+  --color-blue-950: #080616;
 
   --color-amber-105: #fde9a9;
   --color-amber-605: #d77606;
@@ -47,6 +48,10 @@
     /* Keep anchor targets (e.g. #contact-desk) clear of the sticky header. */
     scroll-padding-top: 6rem;
     -webkit-text-size-adjust: 100%;
+    /* Belt-and-suspenders alongside body's overflow-x: clip below — guards
+       against full-bleed layers pushing the viewport wider than 100vw on
+       narrow/mobile widths. */
+    overflow-x: hidden;
   }
 
   body {
@@ -203,18 +208,19 @@
    ============================================================ */
 
 /* Animated gradient text for the hero headline.
-   Brand palette: navy (#000080) base with neon-blue (#1F51FF) accents. */
+   Brand palette: navy → near-black anchor (--color-blue-950) with the
+   primary/CTA accent (--color-blue-600) sweeping through. */
 .text-gradient-animated {
   background: linear-gradient(
     100deg,
-    #0a0a3c 0%,
-    #000080 16%,
-    #1F51FF 30%,
-    #4a73ff 44%,
-    #0a0a3c 58%,
-    #1F51FF 74%,
-    #2c5dff 88%,
-    #0a0a3c 100%
+    var(--color-blue-950) 0%,
+    var(--color-blue-700) 16%,
+    var(--color-blue-600) 30%,
+    var(--color-blue-500) 44%,
+    var(--color-blue-950) 58%,
+    var(--color-blue-600) 74%,
+    var(--color-blue-500) 88%,
+    var(--color-blue-950) 100%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -229,14 +235,14 @@
 .bar-animated {
   background-image: linear-gradient(
     100deg,
-    #000080 0%,
-    #1035c0 16%,
-    #1F51FF 32%,
-    #4a73ff 44%,
-    #000080 58%,
-    #1F51FF 74%,
-    #1035c0 88%,
-    #000080 100%
+    var(--color-blue-700) 0%,
+    var(--color-blue-650) 16%,
+    var(--color-blue-600) 32%,
+    var(--color-blue-500) 44%,
+    var(--color-blue-700) 58%,
+    var(--color-blue-600) 74%,
+    var(--color-blue-650) 88%,
+    var(--color-blue-700) 100%
   );
   background-size: 200% auto;
   animation: gradient-pan 6s linear infinite;

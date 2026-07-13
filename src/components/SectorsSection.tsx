@@ -72,7 +72,7 @@ export default function SectorsSection({ language, onOpenRequest }: SectorsSecti
 
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-[9px] text-[#22C55E] font-bold uppercase tracking-wider">
+                      <span className="font-mono text-[9px] text-blue-600 font-bold uppercase tracking-wider">
                         {sector.demandRate}% {language === 'EN' ? 'DEMAND RATE' : 'ПОБАРУВАЊЕ'}
                       </span>
                     </div>
