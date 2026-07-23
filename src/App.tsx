@@ -36,6 +36,7 @@ import { LANGUAGE_DETAILS, getTranslations } from './translations';
 import ParticleBackground from './components/ParticleBackground';
 import HeroBackgroundImages from './components/HeroBackgroundImages';
 import ChatWidget from './components/ChatWidget';
+import { Analytics } from '@vercel/analytics/react';
 
 interface LedgerItem {
   id: string;
@@ -1494,6 +1495,7 @@ export default function App() {
       </footer>
 
       </div>
+      <Analytics />
     </div>
   );
 }
