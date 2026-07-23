@@ -20,7 +20,10 @@ function getOrCreateConversationId(): string {
   if (typeof window === 'undefined') return '';
   let id = localStorage.getItem(CONVERSATION_ID_KEY);
   if (!id) {
-    id = crypto.randomUUID();
+    id = crypto.randomUUID?.() ?? 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = Math.random() * 16 | 0;
+      return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
     localStorage.setItem(CONVERSATION_ID_KEY, id);
   }
   return id;
@@ -34,25 +37,35 @@ function getOrCreateConversationId(): string {
  * /api/telegram-webhook) show up here via polling, and the visitor can keep
  * sending follow-up messages without re-entering their details.
  */
+// Widget flow steps. `resume` = the "have you chatted before?" email-lookup
+// gate shown before the fresh name/email form; `form` = the new-conversation
+// name/email/message form; `thread` = an active/resumed conversation.
+type ChatStep = 'resume' | 'form' | 'thread';
+
 export default function ChatWidget() {
   const { t } = useSite();
 
-  const [conversationId] = useState(getOrCreateConversationId);
+  const [conversationId, setConversationId] = useState(getOrCreateConversationId);
   const [isOpen, setIsOpen] = useState(false);
+  const [step, setStep] = useState<ChatStep>('resume');
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [resumeEmail, setResumeEmail] = useState('');
   const [composerText, setComposerText] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResuming, setIsResuming] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [resumeNotice, setResumeNotice] = useState('');
 
   const threadEndRef = useRef<HTMLDivElement>(null);
 
-  // Poll for new messages (including owner replies) while the panel is
-  // open. Fires once immediately on open to catch up on anything that
-  // arrived while the widget was closed, then every ~3.5s after that.
+  // Poll for new messages (including owner replies) while the panel is open
+  // AND a conversation is actually active. Fires once immediately to catch up
+  // on anything that arrived while the widget was closed, then every ~3.5s.
+  // Skipped on the resume/form steps — there's no conversation to poll yet.
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || step !== 'thread') return;
 
     let cancelled = false;
     const poll = async () => {
@@ -73,19 +86,100 @@ export default function ChatWidget() {
       cancelled = true;
       clearInterval(interval);
     };
-  }, [isOpen, conversationId]);
+  }, [isOpen, step, conversationId]);
+
+  // When the panel first opens, if this browser already carries an active
+  // conversation (localStorage id with existing messages), skip the resume
+  // gate and drop straight into the thread — the visitor doesn't need to
+  // re-identify themselves on their own device.
+  useEffect(() => {
+    if (!isOpen || step !== 'resume') return;
+    if (!conversationId) return;
+
+    let cancelled = false;
+    (async () => {
+      try {
+        const response = await fetch(`/api/chat-messages?conversationId=${conversationId}`);
+        const data = await response.json();
+        if (!cancelled && data.success && (data.messages?.length ?? 0) > 0) {
+          setMessages(data.messages);
+          setStep('thread');
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+    // Only run this probe once per open, on the resume step.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   // Keep the thread scrolled to the latest message.
   useEffect(() => {
     threadEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const hasConversation = messages.length > 0;
+  // Resume-or-new: look up an open conversation by email. On a hit, adopt that
+  // conversationId (persisting it so polling/follow-ups target the resumed
+  // thread) and jump into it. On a miss, fall through to the fresh form with a
+  // gentle notice — never a hard error, matching the fail-open convention.
+  const handleResumeLookup = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!resumeEmail || isResuming) return;
+
+    setIsResuming(true);
+    setErrorMessage('');
+    setResumeNotice('');
+
+    try {
+      const response = await fetch('/api/chat-resume', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: resumeEmail })
+      });
+      const data = await response.json();
+      setIsResuming(false);
+
+      if (response.ok && data.success && data.found) {
+        setConversationId(data.conversationId);
+        try {
+          localStorage.setItem(CONVERSATION_ID_KEY, data.conversationId);
+        } catch {
+          /* ignore storage errors */
+        }
+        setName(data.visitorName || '');
+        setEmail(data.visitorEmail || resumeEmail);
+        setMessages(data.messages || []);
+        setStep('thread');
+      } else {
+        // No open chat for that email — prefill it and move to the fresh form.
+        setEmail(resumeEmail);
+        setResumeNotice(t.chatWidgetResumeNotFound || 'No open chat found. Starting a new one.');
+        setStep('form');
+      }
+    } catch (err) {
+      console.error(err);
+      setIsResuming(false);
+      // Lookup blip shouldn't block the visitor — fall through to the form.
+      setEmail(resumeEmail);
+      setStep('form');
+    }
+  };
+
+  const startNewChat = () => {
+    setErrorMessage('');
+    setResumeNotice('');
+    setStep('form');
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!composerText) return;
-    if (!hasConversation && (!name || !email)) return;
+    const isThread = step === 'thread';
+    if (!isThread && (!name || !email)) return;
 
     setIsSubmitting(true);
     setErrorMessage('');
@@ -103,6 +197,7 @@ export default function ChatWidget() {
       if (response.ok && data.success) {
         setMessages(data.messages || []);
         setComposerText('');
+        setStep('thread');
       } else {
         setErrorMessage(data.message || t.chatWidgetErrorGeneric || 'Something went wrong.');
       }
@@ -143,7 +238,7 @@ export default function ChatWidget() {
               </button>
             </div>
 
-            {hasConversation ? (
+            {step === 'thread' ? (
               <>
                 {/* Message thread */}
                 <div className="flex-1 max-h-80 overflow-y-auto p-4 space-y-3">
@@ -190,8 +285,53 @@ export default function ChatWidget() {
                   <p className="text-[11px] text-red-600 font-mono px-3 pb-2">{errorMessage}</p>
                 )}
               </>
+            ) : step === 'resume' ? (
+              /* Resume-or-new gate: look up an open conversation by email */
+              <div className="p-4 sm:p-5">
+                <form onSubmit={handleResumeLookup} className="space-y-3 text-left">
+                  <div className="space-y-1">
+                    <h4 className="text-sm font-bold text-zinc-900 leading-snug">
+                      {t.chatWidgetResumePrompt}
+                    </h4>
+                    <p className="text-xs text-zinc-500 leading-relaxed">
+                      {t.chatWidgetResumeDesc}
+                    </p>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="block text-[10px] font-mono uppercase text-zinc-500 font-bold">
+                      {t.chatWidgetLabelEmail}
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      value={resumeEmail}
+                      onChange={(e) => setResumeEmail(e.target.value)}
+                      placeholder={t.chatWidgetPlaceholderEmail}
+                      className="w-full bg-zinc-50 border border-zinc-200 text-zinc-900 rounded-lg px-3 py-2.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isResuming || !resumeEmail}
+                    className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-mono text-xs uppercase font-bold tracking-wide rounded-lg transition"
+                  >
+                    {isResuming ? t.chatWidgetResumeSearching : t.chatWidgetResumeFind}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={startNewChat}
+                    className="w-full py-2.5 bg-white border border-zinc-200 hover:bg-zinc-50 text-zinc-700 font-mono text-xs uppercase font-bold tracking-wide rounded-lg transition"
+                  >
+                    {t.chatWidgetResumeNew}
+                  </button>
+                </form>
+              </div>
             ) : (
               <div className="p-4 sm:p-5">
+                {resumeNotice && (
+                  <p className="mb-3 text-[11px] text-zinc-500 leading-relaxed">{resumeNotice}</p>
+                )}
                 <form onSubmit={handleSubmit} className="space-y-3 text-left">
                   <div className="space-y-1">
                     <label className="block text-[10px] font-mono uppercase text-zinc-500 font-bold">
@@ -248,6 +388,22 @@ export default function ChatWidget() {
               </div>
             )}
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Reassurance copy near the launcher — only while the panel is closed
+          so it doesn't fight the open chat panel for space. */}
+      <AnimatePresence>
+        {!isOpen && (
+          <motion.p
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 6 }}
+            transition={{ duration: 0.25 }}
+            className="hidden sm:block max-w-[15rem] text-right text-[11px] leading-snug text-zinc-500 bg-white/80 backdrop-blur px-2.5 py-1.5 rounded-lg shadow-sm border border-zinc-100"
+          >
+            {t.chatWidgetReassurance}
+          </motion.p>
         )}
       </AnimatePresence>
 

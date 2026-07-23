@@ -68,7 +68,22 @@ export function getTranslations(lang: Language): TranslationKeys {
     chatWidgetErrorGeneric: base.chatWidgetErrorGeneric || getFallback("chatWidgetErrorGeneric", lang),
     chatWidgetClose: base.chatWidgetClose || getFallback("chatWidgetClose", lang),
     chatWidgetPlaceholderFollowup: base.chatWidgetPlaceholderFollowup || getFallback("chatWidgetPlaceholderFollowup", lang),
-    chatWidgetOwnerLabel: base.chatWidgetOwnerLabel || getFallback("chatWidgetOwnerLabel", lang)
+    chatWidgetOwnerLabel: base.chatWidgetOwnerLabel || getFallback("chatWidgetOwnerLabel", lang),
+    chatWidgetResumePrompt: base.chatWidgetResumePrompt || getFallback("chatWidgetResumePrompt", lang),
+    chatWidgetResumeDesc: base.chatWidgetResumeDesc || getFallback("chatWidgetResumeDesc", lang),
+    chatWidgetResumeFind: base.chatWidgetResumeFind || getFallback("chatWidgetResumeFind", lang),
+    chatWidgetResumeNew: base.chatWidgetResumeNew || getFallback("chatWidgetResumeNew", lang),
+    chatWidgetResumeSearching: base.chatWidgetResumeSearching || getFallback("chatWidgetResumeSearching", lang),
+    chatWidgetResumeNotFound: base.chatWidgetResumeNotFound || getFallback("chatWidgetResumeNotFound", lang),
+    chatWidgetReassurance: base.chatWidgetReassurance || getFallback("chatWidgetReassurance", lang),
+    statProcessValue: base.statProcessValue || getFallback("statProcessValue", lang),
+    statProcessLabel: base.statProcessLabel || getFallback("statProcessLabel", lang),
+    statSourceValue: base.statSourceValue || getFallback("statSourceValue", lang),
+    statSourceLabel: base.statSourceLabel || getFallback("statSourceLabel", lang),
+    statIndustriesValue: base.statIndustriesValue || getFallback("statIndustriesValue", lang),
+    statIndustriesLabel: base.statIndustriesLabel || getFallback("statIndustriesLabel", lang),
+    statLaunchValue: base.statLaunchValue || getFallback("statLaunchValue", lang),
+    statLaunchLabel: base.statLaunchLabel || getFallback("statLaunchLabel", lang)
   };
 }
 
@@ -392,5 +407,158 @@ const EXTRA_DATA: Record<string, Record<string, string>> = {
     EL: "Ομάδα A25",
     PL: "Zespół A25",
     SV: "A25-teamet"
+  },
+  chatWidgetResumePrompt: {
+    EN: "Have you chatted with us before?",
+    MK: "Дали сте разговарале со нас претходно?",
+    AL: "A keni biseduar me ne më parë?",
+    DE: "Haben Sie schon einmal mit uns gechattet?",
+    ES: "¿Ya has chateado con nosotros antes?",
+    EL: "Έχετε συνομιλήσει ξανά μαζί μας;",
+    PL: "Czy rozmawiałeś już z nami wcześniej?",
+    SV: "Har du chattat med oss tidigare?"
+  },
+  chatWidgetResumeDesc: {
+    EN: "Enter your email and we'll pull up your open conversation.",
+    MK: "Внесете ја вашата е-пошта и ќе го отвориме вашиот отворен разговор.",
+    AL: "Vendosni emailin tuaj dhe do të hapim bisedën tuaj ekzistuese.",
+    DE: "Geben Sie Ihre E-Mail-Adresse ein und wir rufen Ihr offenes Gespräch auf.",
+    ES: "Introduce tu correo y recuperaremos tu conversación abierta.",
+    EL: "Καταχωρίστε το email σας και θα ανακτήσουμε την ανοιχτή συνομιλία σας.",
+    PL: "Podaj swój e-mail, a odnajdziemy Twoją otwartą rozmowę.",
+    SV: "Ange din e-post så hämtar vi din pågående konversation."
+  },
+  chatWidgetResumeFind: {
+    EN: "Yes, find my chat",
+    MK: "Да, најди го мојот разговор",
+    AL: "Po, gjej bisedën time",
+    DE: "Ja, meinen Chat finden",
+    ES: "Sí, buscar mi chat",
+    EL: "Ναι, βρες τη συνομιλία μου",
+    PL: "Tak, znajdź mój czat",
+    SV: "Ja, hitta min chatt"
+  },
+  chatWidgetResumeNew: {
+    EN: "No, start new",
+    MK: "Не, започни нов",
+    AL: "Jo, fillo të ri",
+    DE: "Nein, neu starten",
+    ES: "No, empezar de nuevo",
+    EL: "Όχι, νέα συνομιλία",
+    PL: "Nie, rozpocznij nowy",
+    SV: "Nej, starta ny"
+  },
+  chatWidgetResumeSearching: {
+    EN: "Looking for your chat...",
+    MK: "Го бараме вашиот разговор...",
+    AL: "Duke kërkuar bisedën tuaj...",
+    DE: "Ihr Chat wird gesucht...",
+    ES: "Buscando tu chat...",
+    EL: "Αναζήτηση της συνομιλίας σας...",
+    PL: "Szukamy Twojego czatu...",
+    SV: "Söker efter din chatt..."
+  },
+  chatWidgetResumeNotFound: {
+    EN: "We couldn't find an open chat for that email. Let's start a new one.",
+    MK: "Не најдовме отворен разговор за таа е-пошта. Да започнеме нов.",
+    AL: "Nuk gjetëm një bisedë të hapur për këtë email. Le të fillojmë një të re.",
+    DE: "Wir konnten keinen offenen Chat für diese E-Mail finden. Beginnen wir einen neuen.",
+    ES: "No encontramos un chat abierto para ese correo. Empecemos uno nuevo.",
+    EL: "Δεν βρήκαμε ανοιχτή συνομιλία για αυτό το email. Ας ξεκινήσουμε μια νέα.",
+    PL: "Nie znaleźliśmy otwartego czatu dla tego adresu e-mail. Zacznijmy nowy.",
+    SV: "Vi hittade ingen pågående chatt för den e-posten. Låt oss starta en ny."
+  },
+  // Phase 7f — hero process-facts stats. Deliberately NO volume/traction
+  // numbers (candidates available, workers placed): A25 hasn't launched and
+  // faking traction is a credibility risk. Only facts true today.
+  statProcessValue: {
+    EN: "30–90 days",
+    MK: "30–90 дена",
+    AL: "30–90 ditë",
+    DE: "30–90 Tage",
+    ES: "30–90 días",
+    EL: "30–90 ημέρες",
+    PL: "30–90 dni",
+    SV: "30–90 dagar"
+  },
+  statProcessLabel: {
+    EN: "Typical process",
+    MK: "Типичен процес",
+    AL: "Procesi tipik",
+    DE: "Typischer Prozess",
+    ES: "Proceso habitual",
+    EL: "Τυπική διαδικασία",
+    PL: "Typowy proces",
+    SV: "Typisk process"
+  },
+  statSourceValue: {
+    EN: "Asia",
+    MK: "Азија",
+    AL: "Azia",
+    DE: "Asien",
+    ES: "Asia",
+    EL: "Ασία",
+    PL: "Azja",
+    SV: "Asien"
+  },
+  statSourceLabel: {
+    EN: "Sourcing region",
+    MK: "Регион на регрутирање",
+    AL: "Rajoni i burimit",
+    DE: "Herkunftsregion",
+    ES: "Región de origen",
+    EL: "Περιοχή προέλευσης",
+    PL: "Region pozyskiwania",
+    SV: "Ursprungsregion"
+  },
+  statIndustriesValue: {
+    EN: "7",
+    MK: "7",
+    AL: "7",
+    DE: "7",
+    ES: "7",
+    EL: "7",
+    PL: "7",
+    SV: "7"
+  },
+  statIndustriesLabel: {
+    EN: "Industries served",
+    MK: "Индустрии",
+    AL: "Industri të mbuluara",
+    DE: "Branchen",
+    ES: "Sectores",
+    EL: "Κλάδοι",
+    PL: "Branże",
+    SV: "Branscher"
+  },
+  statLaunchValue: {
+    EN: "2026",
+    MK: "2026",
+    AL: "2026",
+    DE: "2026",
+    ES: "2026",
+    EL: "2026",
+    PL: "2026",
+    SV: "2026"
+  },
+  statLaunchLabel: {
+    EN: "Founded",
+    MK: "Основана",
+    AL: "Themeluar",
+    DE: "Gegründet",
+    ES: "Fundada",
+    EL: "Ιδρύθηκε",
+    PL: "Założona",
+    SV: "Grundad"
+  },
+  chatWidgetReassurance: {
+    EN: "24/7 live chat with a real person — most replies come back within minutes.",
+    MK: "Разговор во живо 24/7 со вистинска личност — повеќето одговори стигнуваат за неколку минути.",
+    AL: "Bisedë e drejtpërdrejtë 24/7 me një person real — shumica e përgjigjeve vijnë brenda pak minutash.",
+    DE: "24/7-Live-Chat mit einer echten Person — die meisten Antworten kommen innerhalb von Minuten.",
+    ES: "Chat en vivo 24/7 con una persona real — la mayoría de las respuestas llegan en minutos.",
+    EL: "Ζωντανή συνομιλία 24/7 με πραγματικό άτομο — οι περισσότερες απαντήσεις έρχονται μέσα σε λεπτά.",
+    PL: "Czat na żywo 24/7 z prawdziwą osobą — większość odpowiedzi otrzymasz w ciągu kilku minut.",
+    SV: "Livechatt dygnet runt med en riktig person — de flesta svar kommer inom några minuter."
   }
 };

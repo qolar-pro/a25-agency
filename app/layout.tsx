@@ -3,7 +3,7 @@ import './globals.css';
 import ParticleBackground from './components/ParticleBackground';
 import HeroBackgroundImages from './components/HeroBackgroundImages';
 
-const SITE_URL = 'https://a25.mk';
+const SITE_URL = 'https://www.a25.mk';
 
 // Site-wide metadata defaults. Per-route pages (e.g. app/page.tsx) override
 // the title/description with their own. This replaces the single static

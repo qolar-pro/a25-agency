@@ -9,3 +9,12 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Internal Claude Code / build planning docs
+.claude/
+CLAUDE.md
+BUILD_PROGRESS.md
+HOW-TO-RUN-THE-BUILD.md
+a25-audit-and-buildplan.md
+a25-claude-code-prompt.md
+docs/

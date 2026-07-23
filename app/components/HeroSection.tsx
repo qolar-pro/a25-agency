@@ -1,6 +1,6 @@
 'use client';
 
-import { Shield, Building2, UserCheck, CheckCircle2, Check } from 'lucide-react';
+import { Shield, Building2, UserCheck, CheckCircle2, Check, Clock, Globe2, Layers, Calendar } from 'lucide-react';
 import { useSite } from './SiteProvider';
 
 // SCROLL AREA 1 (upper half): the hero greeting + CTAs and the symmetrical
@@ -42,6 +42,32 @@ export default function HeroSection() {
             <UserCheck className="w-4 h-4" />
             <span>{t.lookingForWork}</span>
           </button>
+        </div>
+
+        {/* Process-facts stats row — Phase 7f. Facts true today only (process
+            length, sourcing region, industry count, founding year). NOT volume
+            /traction numbers: A25 hasn't launched, so no candidates-available
+            or workers-placed claims (see CLAUDE.md "Hero stats"). */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 max-w-2xl mx-auto">
+          {[
+            { icon: Clock, value: t.statProcessValue, label: t.statProcessLabel },
+            { icon: Globe2, value: t.statSourceValue, label: t.statSourceLabel },
+            { icon: Layers, value: t.statIndustriesValue, label: t.statIndustriesLabel },
+            { icon: Calendar, value: t.statLaunchValue, label: t.statLaunchLabel },
+          ].map(({ icon: Icon, value, label }, idx) => (
+            <div
+              key={idx}
+              className="card-glass border border-zinc-200/70 rounded-xl px-3 py-4 flex flex-col items-center text-center gap-1.5 hover:border-blue-300/70 transition-colors"
+            >
+              <Icon className="w-4 h-4 text-blue-600" />
+              <span className="text-lg sm:text-xl font-bold tracking-tight text-zinc-950 leading-none">
+                {value}
+              </span>
+              <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 leading-tight">
+                {label}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
 

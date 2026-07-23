@@ -1,5 +1,5 @@
 {
-  "name": "react-example",
+  "name": "a25-agency",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -22,6 +22,7 @@
     "@vitejs/plugin-react": "^5.0.4",
     "dotenv": "^17.2.3",
     "express": "^4.21.2",
+    "geoip-lite": "^2.0.3",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
     "next": "^15.5.20",
@@ -36,6 +37,7 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
+    "@types/geoip-lite": "^1.4.4",
     "@types/node": "^22.14.0",
     "@types/nodemailer": "^8.0.0",
     "@types/react": "^19.2.17",

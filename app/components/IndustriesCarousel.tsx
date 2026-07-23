@@ -2,34 +2,38 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { HardHat, UtensilsCrossed, Sprout, Warehouse, Users, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSite } from './SiteProvider';
+import { INDUSTRIES } from './industriesData';
+import IndustryModal from './IndustryModal';
 
-// Industries carousel — placeholder sector cards, centered auto-cycling
-// postcard carousel. All carousel state (index, paused, auto-cycle) is local
-// to this section; only `t` comes from context. JSX verbatim from App.tsx.
+// Industries carousel — 7 real sector cards (Phase 3), centered auto-cycling
+// postcard carousel. Carousel state (index, paused, auto-cycle) and the
+// Read-More modal open/index state are local to this section; only `language`
+// and `t` come from context. Copy is sourced per-language from INDUSTRIES.
 export default function IndustriesCarousel() {
-  const { t } = useSite();
-
-  const industries = [
-    { key: 'construction', label: t.optConstruction, desc: t.industryDescConstruction || 'Skilled trade & site labor sourcing.', icon: HardHat, iconBg: 'bg-blue-50', iconColor: 'text-blue-600' },
-    { key: 'hospitality', label: t.optHospitality, desc: t.industryDescHospitality || 'Hospitality & guest service staffing.', icon: UtensilsCrossed, iconBg: 'bg-amber-50', iconColor: 'text-amber-600' },
-    { key: 'agriculture', label: t.optAgriculture, desc: t.industryDescAgriculture || 'Seasonal & permanent field labor.', icon: Sprout, iconBg: 'bg-blue-100', iconColor: 'text-blue-700' },
-    { key: 'manufacturing', label: t.optManufacturing, desc: t.industryDescManufacturing || 'Warehouse & production line staffing.', icon: Warehouse, iconBg: 'bg-zinc-100', iconColor: 'text-zinc-700' },
-    { key: 'generic', label: t.optGeneric || 'Generic Workers', desc: t.industryDescGeneric || 'General labor for any role or site.', icon: Users, iconBg: 'bg-blue-200', iconColor: 'text-blue-800' },
-  ];
+  const { language, t } = useSite();
 
   const [industryIndex, setIndustryIndex] = useState(0);
   const [industriesPaused, setIndustriesPaused] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalIndex, setModalIndex] = useState(0);
 
-  // Auto-cycle the industries carousel forever, pausing on hover.
+  const openIndustryModal = (i: number) => {
+    setModalIndex(i);
+    setModalOpen(true);
+    setIndustriesPaused(true);
+  };
+
+  // Auto-cycle the industries carousel forever, pausing on hover or while the
+  // modal is open.
   useEffect(() => {
-    if (industriesPaused) return;
+    if (industriesPaused || modalOpen) return;
     const id = setInterval(() => {
-      setIndustryIndex((i) => (i + 1) % industries.length);
+      setIndustryIndex((i) => (i + 1) % INDUSTRIES.length);
     }, 4000);
     return () => clearInterval(id);
-  }, [industriesPaused, industries.length]);
+  }, [industriesPaused, modalOpen]);
 
   return (
     <div className="reveal space-y-6">
@@ -48,9 +52,9 @@ export default function IndustriesCarousel() {
         onMouseEnter={() => setIndustriesPaused(true)}
         onMouseLeave={() => setIndustriesPaused(false)}
       >
-        <div className="relative h-[250px] sm:h-[280px]">
-          {industries.map((ind, i) => {
-            const n = industries.length;
+        <div className="relative h-[280px] sm:h-[300px]">
+          {INDUSTRIES.map((ind, i) => {
+            const n = INDUSTRIES.length;
             let diff = i - industryIndex;
             if (diff > n / 2) diff -= n;
             if (diff < -n / 2) diff += n;
@@ -73,11 +77,16 @@ export default function IndustriesCarousel() {
                 <div className={`h-11 w-11 sm:h-12 sm:w-12 rounded-xl flex items-center justify-center ${ind.iconBg} ${ind.iconColor}`}>
                   <ind.icon className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
-                <h4 className="font-bold text-sm sm:text-base text-zinc-900 uppercase tracking-tight">{ind.label}</h4>
-                <p className="text-[11px] sm:text-xs text-zinc-500 leading-relaxed max-w-[240px]">{ind.desc}</p>
-                <span className="inline-flex items-center gap-1 text-[9px] font-mono font-bold text-zinc-400 uppercase tracking-wider bg-zinc-100 px-2 py-0.5 rounded-full">
-                  {t.moreComingSoon || 'More coming soon'}
-                </span>
+                <h4 className="font-bold text-sm sm:text-base text-zinc-900 uppercase tracking-tight">{ind.label[language]}</h4>
+                <p className="text-[11px] sm:text-xs text-zinc-500 leading-relaxed max-w-[240px]">{ind.subtitle[language]}</p>
+                <button
+                  type="button"
+                  onClick={() => openIndustryModal(i)}
+                  className="mt-1 inline-flex items-center gap-1 text-[11px] font-mono font-bold text-blue-600 hover:text-blue-700 uppercase tracking-wider bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-full transition-colors"
+                >
+                  {t.readMore || 'Read More'}
+                  <ChevronRight className="w-3 h-3" />
+                </button>
               </motion.div>
             );
           })}
@@ -86,7 +95,7 @@ export default function IndustriesCarousel() {
         {/* Manual prev/next controls */}
         <button
           type="button"
-          onClick={() => setIndustryIndex((i) => (i - 1 + industries.length) % industries.length)}
+          onClick={() => setIndustryIndex((i) => (i - 1 + INDUSTRIES.length) % INDUSTRIES.length)}
           aria-label="Previous industry"
           className="absolute left-2 sm:left-6 md:left-12 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-white shadow-md border border-zinc-200 hover:bg-zinc-50 text-zinc-600 flex items-center justify-center transition-all z-40"
         >
@@ -94,7 +103,7 @@ export default function IndustriesCarousel() {
         </button>
         <button
           type="button"
-          onClick={() => setIndustryIndex((i) => (i + 1) % industries.length)}
+          onClick={() => setIndustryIndex((i) => (i + 1) % INDUSTRIES.length)}
           aria-label="Next industry"
           className="absolute right-2 sm:right-6 md:right-12 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-white shadow-md border border-zinc-200 hover:bg-zinc-50 text-zinc-600 flex items-center justify-center transition-all z-40"
         >
@@ -103,17 +112,24 @@ export default function IndustriesCarousel() {
 
         {/* Dot indicators */}
         <div className="flex items-center justify-center gap-2 mt-5">
-          {industries.map((ind, i) => (
+          {INDUSTRIES.map((ind, i) => (
             <button
               key={ind.key}
               type="button"
               onClick={() => setIndustryIndex(i)}
-              aria-label={`Go to ${ind.label}`}
+              aria-label={`Go to ${ind.label[language]}`}
               className={`h-1.5 rounded-full transition-all ${i === industryIndex ? 'w-6 bg-blue-600' : 'w-1.5 bg-zinc-300 hover:bg-zinc-400'}`}
             />
           ))}
         </div>
       </div>
+
+      <IndustryModal
+        open={modalOpen}
+        index={modalIndex}
+        onClose={() => setModalOpen(false)}
+        onNavigate={setModalIndex}
+      />
     </div>
   );
 }

@@ -73,6 +73,7 @@ export interface TranslationKeys {
   sectorsSectionLabel?: string;
   sectorsSectionTitle?: string;
   moreComingSoon?: string;
+  readMore?: string;
   industryDescConstruction?: string;
   industryDescHospitality?: string;
   industryDescAgriculture?: string;
@@ -122,6 +123,24 @@ export interface TranslationKeys {
   chatWidgetClose?: string;
   chatWidgetPlaceholderFollowup?: string;
   chatWidgetOwnerLabel?: string;
+  chatWidgetResumePrompt?: string;
+  chatWidgetResumeDesc?: string;
+  chatWidgetResumeFind?: string;
+  chatWidgetResumeNew?: string;
+  chatWidgetResumeSearching?: string;
+  chatWidgetResumeNotFound?: string;
+  chatWidgetReassurance?: string;
+  // Phase 7f — hero process-facts stats row. Process facts only (true today),
+  // never volume/traction numbers — A25 hasn't launched (see CLAUDE.md
+  // "Hero stats — do not add invented numbers").
+  statProcessValue?: string;
+  statProcessLabel?: string;
+  statSourceValue?: string;
+  statSourceLabel?: string;
+  statIndustriesValue?: string;
+  statIndustriesLabel?: string;
+  statLaunchValue?: string;
+  statLaunchLabel?: string;
 }
 
 export const LANGUAGE_DETAILS: Record<Language, { label: string; flag: string; native: string }> = {

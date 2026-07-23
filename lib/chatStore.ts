@@ -19,6 +19,7 @@ export interface ConversationRecord {
   conversationId: string;
   visitorName: string;
   visitorEmail: string;
+  language?: string; // ISO-style code from Accept-Language header, e.g. "EN", "MK", "DE"
   createdAt: number;
   messages: ChatMessage[];
   telegramMessageIds: number[];
@@ -31,6 +32,15 @@ const useUpstash = !!(UPSTASH_URL && UPSTASH_TOKEN);
 // In-memory fallback store (local dev only — see note above).
 const memoryConversations = new Map<string, ConversationRecord>();
 const memoryReplyIndex = new Map<number, string>();
+const memoryEmailIndex = new Map<string, string>();
+
+// Conversations self-expire after 3 days of inactivity. The TTL is refreshed
+// on every saveConversation (i.e. every new message), so an actively-used
+// thread never expires mid-conversation — only genuinely stale ones do.
+const CONVERSATION_TTL_SECONDS = 3 * 24 * 60 * 60;
+
+// Normalize emails for indexing so lookups aren't defeated by casing/whitespace.
+const normalizeEmail = (email: string) => email.trim().toLowerCase();
 
 let redisClient: any = null;
 async function getRedis() {
@@ -43,6 +53,7 @@ async function getRedis() {
 
 const conversationKey = (id: string) => `chat:conv:${id}`;
 const replyIndexKey = (telegramMessageId: number) => `chat:tgmsg:${telegramMessageId}`;
+const emailIndexKey = (email: string) => `chat:email:${normalizeEmail(email)}`;
 
 export async function getConversation(conversationId: string): Promise<ConversationRecord | null> {
   if (useUpstash) {
@@ -56,17 +67,34 @@ export async function getConversation(conversationId: string): Promise<Conversat
 export async function createConversation(
   conversationId: string,
   visitorName: string,
-  visitorEmail: string
+  visitorEmail: string,
+  language?: string
 ): Promise<ConversationRecord> {
   const record: ConversationRecord = {
     conversationId,
     visitorName,
     visitorEmail,
+    ...(language ? { language } : {}),
     createdAt: Date.now(),
     messages: [],
     telegramMessageIds: []
   };
   await saveConversation(record);
+
+  // Secondary email → conversationId index so a returning visitor can resume
+  // their open thread by email (see getConversationIdByEmail). Most-recent-wins:
+  // a repeat inquiry from the same email overwrites the pointer, matching the
+  // "one active chat per visitor" assumption. The index shares the same 3-day
+  // TTL as the conversation so it self-cleans alongside it.
+  if (visitorEmail) {
+    if (useUpstash) {
+      const redis = await getRedis();
+      await redis.set(emailIndexKey(visitorEmail), conversationId, { ex: CONVERSATION_TTL_SECONDS });
+    } else {
+      memoryEmailIndex.set(normalizeEmail(visitorEmail), conversationId);
+    }
+  }
+
   return record;
 }
 
@@ -110,10 +138,53 @@ export async function getConversationIdByTelegramMessageId(
   return memoryReplyIndex.get(telegramMessageId) ?? null;
 }
 
+// Resume-by-email lookup, mirroring getConversationIdByTelegramMessageId.
+// Returns the conversationId last associated with this email, or null.
+export async function getConversationIdByEmail(email: string): Promise<string | null> {
+  if (!email) return null;
+  if (useUpstash) {
+    const redis = await getRedis();
+    const value = await redis.get(emailIndexKey(email));
+    return (value as string) ?? null;
+  }
+  return memoryEmailIndex.get(normalizeEmail(email)) ?? null;
+}
+
+// Delete a conversation and every index entry that points at it — used by the
+// Telegram /close command (see lib/chatReplyWebhook.ts). Fully removes the
+// record, its email index pointer, and every Telegram-message reply index it
+// accumulated, so a closed conversation leaves nothing dangling in Redis.
+export async function deleteConversation(conversationId: string): Promise<boolean> {
+  const record = await getConversation(conversationId);
+  if (!record) return false;
+
+  if (useUpstash) {
+    const redis = await getRedis();
+    await redis.del(conversationKey(conversationId));
+    if (record.visitorEmail) {
+      await redis.del(emailIndexKey(record.visitorEmail));
+    }
+    for (const tgMsgId of record.telegramMessageIds) {
+      await redis.del(replyIndexKey(tgMsgId));
+    }
+  } else {
+    memoryConversations.delete(conversationId);
+    if (record.visitorEmail) {
+      memoryEmailIndex.delete(normalizeEmail(record.visitorEmail));
+    }
+    for (const tgMsgId of record.telegramMessageIds) {
+      memoryReplyIndex.delete(tgMsgId);
+    }
+  }
+  return true;
+}
+
 async function saveConversation(record: ConversationRecord): Promise<void> {
   if (useUpstash) {
     const redis = await getRedis();
-    await redis.set(conversationKey(record.conversationId), record);
+    // 3-day TTL, refreshed on every save so active chats never expire
+    // mid-conversation — only truly inactive ones age out.
+    await redis.set(conversationKey(record.conversationId), record, { ex: CONVERSATION_TTL_SECONDS });
   } else {
     memoryConversations.set(record.conversationId, record);
   }

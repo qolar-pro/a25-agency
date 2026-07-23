@@ -390,7 +390,7 @@ ${notes || "Нема додадено белешки."}
 
   // Check if Resend email dispatch secrets are present
   const RESEND_API_KEY = process.env.RESEND_API_KEY;
-  const EMAIL_FROM = process.env.EMAIL_FROM || "A25 Workforce <onboarding@resend.dev>";
+  const EMAIL_FROM = process.env.EMAIL_FROM || "A25 <contact@a25.mk>";
 
   // Prepare professional automatic confirmation templates for the client
   let confirmationSubject = "";
@@ -416,7 +416,7 @@ ${notes || "Нема додадено белешки."}
 
   // 1. Send via Resend API
   if (RESEND_API_KEY) {
-    let fromEmail = EMAIL_FROM || "A25 Workforce <onboarding@resend.dev>";
+    let fromEmail = EMAIL_FROM;
     let attempts = 0;
     const maxAttempts = fromEmail.includes("onboarding@resend.dev") ? 1 : 2;
 

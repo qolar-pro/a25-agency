@@ -237,6 +237,7 @@ export const SV: TranslationKeys = {
   sectorsSectionLabel: "[03 // SEKTORER]",
   sectorsSectionTitle: "Branscher vi Arbetar med",
   moreComingSoon: "Fler kommer snart",
+  readMore: "Läs mer",
   industryDescConstruction: "Kvalificerad arbetskraft för bygg och anläggning.",
   industryDescHospitality: "Personal för hotell, restaurang och gästservice.",
   industryDescAgriculture: "Säsongsbetonad och permanent arbetskraft för jordbruk.",

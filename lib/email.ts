@@ -12,7 +12,7 @@ export async function sendEmailViaResend(params: {
 }): Promise<{ sent: boolean; error?: string }> {
   const { to, subject, html, text } = params;
   const RESEND_API_KEY = process.env.RESEND_API_KEY;
-  const EMAIL_FROM = process.env.EMAIL_FROM || "A25 Workforce <onboarding@resend.dev>";
+  const EMAIL_FROM = process.env.EMAIL_FROM || "A25 <contact@a25.mk>";
 
   if (!RESEND_API_KEY) {
     console.log("[A25 EMAIL] RESEND_API_KEY missing — simulating locally:");

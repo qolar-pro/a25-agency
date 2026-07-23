@@ -15,6 +15,9 @@ import {
   appendMessage,
   recordTelegramMessageMapping
 } from "./chatStore.js";
+import { chatReceivedEmail } from "./chatEmailTemplates.js";
+import { sendEmailViaResend } from "./email.js";
+import { detectFromHeader, rememberLanguage } from "./languageDetect.js";
 
 export async function processChatMessage(req: any, res: any) {
   const { conversationId, name, email, message } = req.body ?? {};
@@ -38,7 +41,29 @@ export async function processChatMessage(req: any, res: any) {
         message: "Missing required fields (name and email are required for a new conversation)."
       });
     }
-    conversation = await createConversation(conversationId, name, email);
+
+    const detectedLanguage = detectFromHeader(
+      req.headers?.["accept-language"] ?? req.headers?.["Accept-Language"]
+    );
+    conversation = await createConversation(conversationId, name, email, detectedLanguage);
+
+    // Write to the shared client-lang index so later features (order tracking's
+    // completion email, the /track page) read one source of truth rather than
+    // re-detecting. Fail-open — a Redis hiccup here must not block the chat.
+    rememberLanguage(email, detectedLanguage).catch(err => {
+      console.log(`[A25 CHAT WIDGET] rememberLanguage failed for ${email}: ${err.message}`);
+    });
+
+    // Fail-open: fire confirmation email but never let a delivery failure
+    // block the visitor's message from being saved and forwarded to Telegram.
+    const received = chatReceivedEmail({ visitorName: name, language: detectedLanguage });
+    sendEmailViaResend({ to: email, ...received }).then(result => {
+      if (!result.sent) {
+        console.log(`[A25 CHAT WIDGET] Chat-received email not sent to ${email}: ${result.error}`);
+      }
+    }).catch(err => {
+      console.log(`[A25 CHAT WIDGET] Chat-received email dispatch error: ${err.message}`);
+    });
   }
 
   // Save the visitor's message immediately, before attempting Telegram

@@ -401,6 +401,7 @@ export const PL: TranslationKeys = {
   sectorsSectionLabel: "[03 // SEKTORY]",
   sectorsSectionTitle: "Branże, w których Działamy",
   moreComingSoon: "Wkrótce więcej",
+  readMore: "Czytaj więcej",
   industryDescConstruction: "Wykwalifikowana siła robocza dla budownictwa.",
   industryDescHospitality: "Personel do obsługi gości i hotelarstwa.",
   industryDescAgriculture: "Sezonowa i stała siła robocza do rolnictwa.",
