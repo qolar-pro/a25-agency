@@ -79,7 +79,7 @@ export async function processChatMessage(req: any, res: any) {
 
   // Plain text only — no parse_mode. Markdown/HTML mode would choke on
   // unescaped visitor input like "*", "_", or "<" and fail the whole send.
-  const text = `From: ${conversation.visitorName} (${conversation.visitorEmail})\n\n${message}`;
+  const text = `From: ${conversation.visitorName} (${conversation.visitorEmail})\nID: ${conversationId}\n\n${message}`;
 
   const finish = async (result: { simulated: boolean; message?: string; error?: string }) => {
     const finalConversation = await getConversation(conversationId);
