@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 import ParticleBackground from './components/ParticleBackground';
 import HeroBackgroundImages from './components/HeroBackgroundImages';
@@ -70,6 +71,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
           <div className="relative z-10">{children}</div>
         </div>
+
+        {/* Vercel Web Analytics — mounted here, in the real App Router layout.
+            (Phase 8g: the stale `vercel/install-vercel-web-analytics-ae9awx`
+            branch patched the retired src/App.tsx instead, which hasn't rendered
+            anything since the Phase 2 migration — do not merge it.) This is what
+            collects the priority_line_* events fired from the Priority Line
+            section/modal. No env var or key needed. */}
+        <Analytics />
       </body>
     </html>
   );

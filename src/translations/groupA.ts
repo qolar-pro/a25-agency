@@ -1,6 +1,6 @@
-import { TranslationKeys } from './types';
+import { TranslationKeys, PartialTranslationKeys } from './types';
 
-export const IT: TranslationKeys = {
+export const IT: PartialTranslationKeys = {
   brand: "A25",
   slogan: "Corridoio Bilaterale",
   tagline: "Collegare le Imprese Macedoni con Lavoratori Balcanici Qualificati",
@@ -172,10 +172,52 @@ export const ES: TranslationKeys = {
   optYes: "Sí / Po",
   optNo: "No / Jo",
   directLine: "Línea Directa",
-  simulatedMessage: "Modo simulado: Configure RESEND_API_KEY en Secrets para el envío real de correos."
+  simulatedMessage: "Modo simulado: Configure RESEND_API_KEY en Secrets para el envío real de correos.",
+  priorityEyebrow: "[04 // PRIORITY LINE]",
+  priorityTitle: "Pase al principio de la cola",
+  priorityPitch: "Todas las solicitudes pasan los mismos controles. La Priority Line solo cambia su lugar en la cola: su expediente se tramita antes que el de otros candidatos en cada fase, y tendrá una llamada en directo por WhatsApp con Boris Vchkov, que dirige A25 — no una respuesta automática, sino una conversación real sobre su caso.",
+  priorityBullet1: "Tramitación por delante de otros candidatos en cada fase del proceso.",
+  priorityBullet2: "Llamada en directo por WhatsApp con Boris Vchkov, fundador de A25.",
+  priorityBullet3: "Un pago único por solicitud, sin suscripción.",
+  priorityPrice: "€9.99",
+  priorityPriceNote: "pago único, por solicitud",
+  priorityCta: "Unirme a la Priority Line",
+  priorityCtaNote: "Todavía no está abierta: deje sus datos y entrará primero cuando abra. Hoy no se cobra nada.",
+  priorityFormTitle: "Priority Line — registre su interés",
+  priorityFormIntro: "Le enviaremos un código de 6 dígitos por correo para confirmar la dirección. En este paso no se cobra nada.",
+  priorityLabelFirstName: "Nombre",
+  priorityLabelSurname: "Apellido",
+  priorityLabelEmail: "Correo electrónico",
+  priorityLabelCountry: "País desde el que solicita",
+  priorityLabelProfession: "Su sector de trabajo",
+  priorityProfessionPlaceholder: "Seleccione su sector",
+  priorityProfessionOther: "Otro / no aparece",
+  priorityLabelPassport: "Situación del pasaporte",
+  priorityPassportNone: "Todavía sin pasaporte",
+  priorityPassportPassport: "Pasaporte (no biométrico)",
+  priorityPassportBiometric: "Pasaporte biométrico",
+  priorityLabelWhatsapp: "Número de WhatsApp",
+  priorityOptional: "opcional",
+  priorityFormSubmit: "Enviarme el código",
+  priorityFormSubmitting: "Enviando...",
+  priorityFormError: "Algo salió mal. Inténtelo de nuevo.",
+  priorityOtpTitle: "Revise su correo",
+  priorityOtpDesc: "Hemos enviado un código de 6 dígitos a {email}. Es válido durante 15 minutos.",
+  priorityOtpLabel: "Código de 6 dígitos",
+  priorityOtpVerify: "Confirmar",
+  priorityOtpVerifying: "Comprobando...",
+  priorityOtpBack: "Volver — pedir un código nuevo",
+  priorityOtpErrorExpired: "Ese código ha caducado. Vuelva atrás y le enviaremos uno nuevo.",
+  priorityOtpErrorWrong: "Ese código no coincide. Revise el correo e inténtelo de nuevo.",
+  priorityOtpErrorTooMany: "Demasiados intentos fallidos. Vuelva atrás y envíe el formulario otra vez para recibir un código nuevo.",
+  priorityDoneTitle: "Está en la lista",
+  priorityDoneBody: "Gracias por su interés: la Priority Line llegará muy pronto (estamos terminando algunos trabajos técnicos). No se ha cobrado nada. Le escribiremos en cuanto esté disponible, y quienes están en esta lista pasan primero.",
+  priorityDoneIdLabel: "Su número de solicitud",
+  priorityBtnClose: "Cerrar",
+  priorityBtnContinue: "Volver al sitio"
 };
 
-export const FR: TranslationKeys = {
+export const FR: PartialTranslationKeys = {
   brand: "A25",
   slogan: "Couloir Bilatéral",
   tagline: "Connecter les Entreprises Macédoniennes avec les Travailleurs des Balkans",
@@ -257,7 +299,7 @@ export const FR: TranslationKeys = {
   simulatedMessage: "Mode simulé : Configurez RESEND_API_KEY dans vos Secrets pour l'envoi réel d'emails."
 };
 
-export const PT: TranslationKeys = {
+export const PT: PartialTranslationKeys = {
   brand: "A25",
   slogan: "Corredor Bilateral",
   tagline: "Conectando Empresas Macedónias com Trabalhadores Qualificados dos Balcãs",
@@ -339,7 +381,7 @@ export const PT: TranslationKeys = {
   simulatedMessage: "Modo simulado: Defina RESEND_API_KEY no painel de Secrets para ativar envios reais."
 };
 
-export const RO: TranslationKeys = {
+export const RO: PartialTranslationKeys = {
   brand: "A25",
   slogan: "Coridor Bilateral",
   tagline: "Conectarea Companiilor Macedonene cu Muncitori Calificați din Balcani",
@@ -511,5 +553,47 @@ export const EL: TranslationKeys = {
   optYes: "Ναι / Po",
   optNo: "Όχι / Jo",
   directLine: "Άμεση Γραμμή",
-  simulatedMessage: "Δοκιμαστική λειτουργία: Ρυθμίστε το RESEND_API_KEY στα Secrets για κανονική αποστολή email."
+  simulatedMessage: "Δοκιμαστική λειτουργία: Ρυθμίστε το RESEND_API_KEY στα Secrets για κανονική αποστολή email.",
+  priorityEyebrow: "[04 // PRIORITY LINE]",
+  priorityTitle: "Περάστε στην αρχή της σειράς",
+  priorityPitch: "Κάθε αίτηση περνά από τους ίδιους ελέγχους. Η Priority Line αλλάζει μόνο τη θέση σας στη σειρά: ο φάκελός σας εξετάζεται πριν από άλλους υποψηφίους σε κάθε στάδιο, και έχετε ζωντανή κλήση στο WhatsApp με τον Boris Vchkov, που διοικεί την A25 — όχι αυτόματη απάντηση, αλλά πραγματική συζήτηση για την περίπτωσή σας.",
+  priorityBullet1: "Εξέταση πριν από άλλους υποψηφίους σε κάθε στάδιο της διαδικασίας.",
+  priorityBullet2: "Ζωντανή κλήση στο WhatsApp με τον Boris Vchkov, ιδρυτή της A25.",
+  priorityBullet3: "Μία εφάπαξ χρέωση ανά αίτηση — χωρίς συνδρομή.",
+  priorityPrice: "€9.99",
+  priorityPriceNote: "εφάπαξ, ανά αίτηση",
+  priorityCta: "Θέλω την Priority Line",
+  priorityCtaNote: "Δεν έχει ανοίξει ακόμη — αφήστε τα στοιχεία σας και θα μπείτε πρώτοι μόλις ανοίξει. Σήμερα δεν χρεώνεται τίποτα.",
+  priorityFormTitle: "Priority Line — δηλώστε ενδιαφέρον",
+  priorityFormIntro: "Θα σας στείλουμε έναν 6-ψήφιο κωδικό με email για να επιβεβαιώσουμε τη διεύθυνση. Σε αυτό το βήμα δεν χρεώνεται τίποτα.",
+  priorityLabelFirstName: "Όνομα",
+  priorityLabelSurname: "Επώνυμο",
+  priorityLabelEmail: "Email",
+  priorityLabelCountry: "Χώρα από την οποία κάνετε αίτηση",
+  priorityLabelProfession: "Ο τομέας εργασίας σας",
+  priorityProfessionPlaceholder: "Επιλέξτε τομέα",
+  priorityProfessionOther: "Άλλο / δεν αναφέρεται",
+  priorityLabelPassport: "Κατάσταση διαβατηρίου",
+  priorityPassportNone: "Δεν έχω διαβατήριο ακόμη",
+  priorityPassportPassport: "Διαβατήριο (μη βιομετρικό)",
+  priorityPassportBiometric: "Βιομετρικό διαβατήριο",
+  priorityLabelWhatsapp: "Αριθμός WhatsApp",
+  priorityOptional: "προαιρετικό",
+  priorityFormSubmit: "Στείλτε μου τον κωδικό",
+  priorityFormSubmitting: "Αποστολή...",
+  priorityFormError: "Κάτι πήγε στραβά. Δοκιμάστε ξανά.",
+  priorityOtpTitle: "Ελέγξτε το email σας",
+  priorityOtpDesc: "Στείλαμε έναν 6-ψήφιο κωδικό στο {email}. Ισχύει για 15 λεπτά.",
+  priorityOtpLabel: "6-ψήφιος κωδικός",
+  priorityOtpVerify: "Επιβεβαίωση",
+  priorityOtpVerifying: "Έλεγχος...",
+  priorityOtpBack: "Πίσω — ζητήστε νέο κωδικό",
+  priorityOtpErrorExpired: "Ο κωδικός έληξε. Επιστρέψτε και θα στείλουμε νέο.",
+  priorityOtpErrorWrong: "Ο κωδικός δεν ταιριάζει. Ελέγξτε το email και δοκιμάστε ξανά.",
+  priorityOtpErrorTooMany: "Πάρα πολλές λανθασμένες προσπάθειες. Επιστρέψτε και υποβάλετε ξανά τη φόρμα για νέο κωδικό.",
+  priorityDoneTitle: "Είστε στη λίστα",
+  priorityDoneBody: "Ευχαριστούμε για το ενδιαφέρον — η Priority Line έρχεται πολύ σύντομα (ολοκληρώνουμε κάποιες τεχνικές εργασίες). Δεν χρεώθηκε τίποτα. Θα σας ενημερώσουμε με email μόλις ανοίξει, και όσοι βρίσκονται σε αυτή τη λίστα προηγούνται.",
+  priorityDoneIdLabel: "Ο αριθμός αίτησής σας",
+  priorityBtnClose: "Κλείσιμο",
+  priorityBtnContinue: "Επιστροφή στον ιστότοπο"
 };

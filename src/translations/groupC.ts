@@ -1,6 +1,6 @@
-import { TranslationKeys } from './types';
+import { TranslationKeys, PartialTranslationKeys } from './types';
 
-export const NL: TranslationKeys = {
+export const NL: PartialTranslationKeys = {
   brand: "A25",
   slogan: "Bilaterale Corridoor",
   tagline: "Macedonische Bedrijven Verbinden met Gekwalificeerde Balkan-Arbeiders",
@@ -82,7 +82,7 @@ export const NL: TranslationKeys = {
   simulatedMessage: "Gesimuleerde modus: Configureer RESEND_API_KEY in Secrets voor live e-mailverzending."
 };
 
-export const HU: TranslationKeys = {
+export const HU: PartialTranslationKeys = {
   brand: "A25",
   slogan: "Kétoldalú Folyosó",
   tagline: "Észak-Macedón Vállalkozások Összekapcsolása Képzett Balkáni Munkavállalókkal",
@@ -254,10 +254,52 @@ export const SV: TranslationKeys = {
   optYes: "Ja / Po",
   optNo: "Nej / Jo",
   directLine: "Direktlinje",
-  simulatedMessage: "Simulerat läge: Ställ in RESEND_API_KEY i Secrets för skarpa e-postutskick."
+  simulatedMessage: "Simulerat läge: Ställ in RESEND_API_KEY i Secrets för skarpa e-postutskick.",
+  priorityEyebrow: "[04 // PRIORITY LINE]",
+  priorityTitle: "Gå först i kön",
+  priorityPitch: "Alla ansökningar går genom samma kontroller. Priority Line ändrar bara var du står i kön: din ansökan behandlas före andra sökande i varje steg, och du får ett livesamtal på WhatsApp med Boris Vchkov, som driver A25 — inget standardsvar, utan ett riktigt samtal om ditt ärende.",
+  priorityBullet1: "Behandlas före andra sökande i varje steg av processen.",
+  priorityBullet2: "Livesamtal på WhatsApp med Boris Vchkov, grundare av A25.",
+  priorityBullet3: "En engångsavgift per ansökan — ingen prenumeration.",
+  priorityPrice: "€9.99",
+  priorityPriceNote: "engångsavgift, per ansökan",
+  priorityCta: "Gå med i Priority Line",
+  priorityCtaNote: "Inte öppen än — lämna dina uppgifter så kommer du in först när den öppnar. Ingenting debiteras idag.",
+  priorityFormTitle: "Priority Line — anmäl ditt intresse",
+  priorityFormIntro: "Vi mejlar dig en 6-siffrig kod för att bekräfta adressen. I det här steget debiteras ingenting.",
+  priorityLabelFirstName: "Förnamn",
+  priorityLabelSurname: "Efternamn",
+  priorityLabelEmail: "E-post",
+  priorityLabelCountry: "Land du ansöker från",
+  priorityLabelProfession: "Ditt yrkesområde",
+  priorityProfessionPlaceholder: "Välj område",
+  priorityProfessionOther: "Annat / finns inte i listan",
+  priorityLabelPassport: "Pass — status",
+  priorityPassportNone: "Inget pass än",
+  priorityPassportPassport: "Pass (inte biometriskt)",
+  priorityPassportBiometric: "Biometriskt pass",
+  priorityLabelWhatsapp: "WhatsApp-nummer",
+  priorityOptional: "valfritt",
+  priorityFormSubmit: "Skicka koden",
+  priorityFormSubmitting: "Skickar...",
+  priorityFormError: "Något gick fel. Försök igen.",
+  priorityOtpTitle: "Kolla din e-post",
+  priorityOtpDesc: "Vi skickade en 6-siffrig kod till {email}. Den är giltig i 15 minuter.",
+  priorityOtpLabel: "6-siffrig kod",
+  priorityOtpVerify: "Bekräfta",
+  priorityOtpVerifying: "Kontrollerar...",
+  priorityOtpBack: "Tillbaka — begär ny kod",
+  priorityOtpErrorExpired: "Koden har gått ut. Gå tillbaka så skickar vi en ny.",
+  priorityOtpErrorWrong: "Koden stämmer inte. Kolla mejlet och försök igen.",
+  priorityOtpErrorTooMany: "För många felaktiga försök. Gå tillbaka och skicka formuläret igen för en ny kod.",
+  priorityDoneTitle: "Du står på listan",
+  priorityDoneBody: "Tack för ditt intresse — Priority Line kommer mycket snart (vi avslutar en del tekniskt arbete). Ingenting har debiterats. Vi mejlar dig så snart den öppnar, och de som står på listan går först.",
+  priorityDoneIdLabel: "Ditt ansökningsnummer",
+  priorityBtnClose: "Stäng",
+  priorityBtnContinue: "Tillbaka till sajten"
 };
 
-export const TR: TranslationKeys = {
+export const TR: PartialTranslationKeys = {
   brand: "A25",
   slogan: "İkili Koridor",
   tagline: "Makedon İşletmeleri ile Kalifiye Balkan İşçilerini Buluşturuyoruz",
@@ -339,7 +381,7 @@ export const TR: TranslationKeys = {
   simulatedMessage: "Simülasyon modu: Canlı e-posta gönderimi için Secrets sekmesinden RESEND_API_KEY değerini ayarlayın."
 };
 
-export const AR: TranslationKeys = {
+export const AR: PartialTranslationKeys = {
   brand: "A25",
   slogan: "الممر الثنائي",
   tagline: "ربط الشركات المقدونية مع عمال البلقان المؤهلين",
@@ -421,7 +463,7 @@ export const AR: TranslationKeys = {
   simulatedMessage: "وضع المحاكاة: يرجى ضبط RESEND_API_KEY لتفعيل الإرسال الحقيقي للرسائل الإلكترونية."
 };
 
-export const HI: TranslationKeys = {
+export const HI: PartialTranslationKeys = {
   brand: "A25",
   slogan: "द्विपक्षीय गलियारा",
   tagline: "मैसेडोनियाई व्यवसायों को योग्य बाल्कन कामगारों से जोड़ना",
@@ -503,7 +545,7 @@ export const HI: TranslationKeys = {
   simulatedMessage: "अनुकरण मोड: ईमेल भेजने के लिए Secrets टैब से RESEND_API_KEY सेट करें।"
 };
 
-export const ZH: TranslationKeys = {
+export const ZH: PartialTranslationKeys = {
   brand: "A25",
   slogan: "双边劳务通道",
   tagline: "精准连接北马其顿企业与合格巴尔干技术工人群体",
@@ -585,7 +627,7 @@ export const ZH: TranslationKeys = {
   simulatedMessage: "模拟模式提示：请在 Secrets 功能区配置 RESEND_API_KEY 才能发送真实执念邮件。"
 };
 
-export const JA: TranslationKeys = {
+export const JA: PartialTranslationKeys = {
   brand: "A25",
   slogan: "二国間労働通路",
   tagline: "北マケドニア企業とバルカン半島の優秀な技能労働者を直接結ぶ正規ルート",
@@ -667,7 +709,7 @@ export const JA: TranslationKeys = {
   simulatedMessage: "テストモード警告：Secretsで RESEND_API_KEY を設定しない場合は、シミュレーション処理されます。"
 };
 
-export const KO: TranslationKeys = {
+export const KO: PartialTranslationKeys = {
   brand: "A25",
   slogan: "양자간 노동 Corridor",
   tagline: "북마케도니아 기업과 신뢰할 수 있는 남부 발칸 반도 숙련공 그룹의 다이렉트 루트",

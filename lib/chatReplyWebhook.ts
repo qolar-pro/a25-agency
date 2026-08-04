@@ -14,6 +14,7 @@ import { chatAnsweredEmail } from "./chatEmailTemplates.js";
 import { createOrder, updateOrderStatus, type OrderStatus } from "./orderStore.js";
 import { getKnownLanguage, normalizeLanguage, type Language } from "./languageDetect.js";
 import { orderCompletedEmail } from "./orderEmailTemplates.js";
+import { getOwnerChatIds, sendTelegramMessage } from "./telegram.js";
 
 // Base URL for the client-facing /track/<token> link included in Boris's
 // Telegram confirmation. a25.mk is the production domain; overridable via
@@ -28,7 +29,10 @@ const UPDATABLE_STATUSES: OrderStatus[] = ["pending", "accepted", "processing", 
 async function handleOrderCommand(
   messageText: string,
   senderChatId: string | number,
-  sendReply: (chatId: string | number, text: string) => Promise<void>
+  // Injected sender — lib/telegram.ts's sendTelegramMessage in practice. Typed
+  // loosely on the return value because this function only ever fires-and-
+  // -forgets confirmations; it never inspects the send result.
+  sendReply: (chatId: string | number, text: string) => Promise<unknown>
 ): Promise<boolean> {
   const trimmed = messageText.trim();
   if (!trimmed.startsWith("/order")) return false;
@@ -122,36 +126,16 @@ async function handleOrderCommand(
   return true;
 }
 
-// Best-effort Telegram reply back to a chat. Fail-open: if this send fails the
-// webhook still acks 200 (Telegram would otherwise retry the whole update).
-async function sendTelegramMessage(chatId: string | number, text: string): Promise<void> {
-  const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-  if (!BOT_TOKEN) {
-    console.log(`[A25 CHAT WEBHOOK] TELEGRAM_BOT_TOKEN missing — would have sent to ${chatId}: ${text}`);
-    return;
-  }
-  try {
-    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: chatId, text })
-    });
-  } catch (err: any) {
-    console.error("[A25 CHAT WEBHOOK] Failed to send Telegram confirmation:", err.message);
-  }
-}
-
 export async function processTelegramWebhook(req: any, res: any) {
   const messageText: string | undefined = req.body?.message?.text;
   const senderChatId = req.body?.message?.chat?.id;
 
-  // Owner commands (e.g. /close) are only honored from the owner's own chat —
-  // TELEGRAM_CHAT_ID. Anyone else messaging the bot is ignored for commands.
-  const OWNER_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
-  const isOwner =
-    OWNER_CHAT_ID != null &&
-    senderChatId != null &&
-    String(senderChatId) === String(OWNER_CHAT_ID);
+  // Owner commands (e.g. /close) are only honored from one of the owners'
+  // chats — TELEGRAM_CHAT_ID, comma-separated when more than one owner (e.g.
+  // Boris + the developer) shares the bot (parsed by the shared helper in
+  // lib/telegram.ts). Anyone else messaging the bot is ignored for commands.
+  const OWNER_CHAT_IDS = getOwnerChatIds();
+  const isOwner = senderChatId != null && OWNER_CHAT_IDS.includes(String(senderChatId));
 
   // /close <conversationId> — owner-only. Deletes the conversation record plus
   // its email/reply index entries, then confirms back in Telegram.
@@ -189,7 +173,7 @@ export async function processTelegramWebhook(req: any, res: any) {
     return res.status(200).json({ ok: true });
   }
 
-  const conversationId = await getConversationIdByTelegramMessageId(replyToId);
+  const conversationId = await getConversationIdByTelegramMessageId(senderChatId, replyToId);
   if (!conversationId) {
     console.log(`[A25 CHAT WEBHOOK] No conversation found for Telegram message ${replyToId}.`);
     return res.status(200).json({ ok: true });

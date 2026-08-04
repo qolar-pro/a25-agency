@@ -22,7 +22,12 @@ export interface ConversationRecord {
   language?: string; // ISO-style code from Accept-Language header, e.g. "EN", "MK", "DE"
   createdAt: number;
   messages: ChatMessage[];
-  telegramMessageIds: number[];
+  // Telegram message IDs are only unique within a single chat, so once
+  // notifications can fan out to more than one owner chat (see
+  // TELEGRAM_CHAT_ID in chatWidget.ts) each entry must carry its chatId too —
+  // otherwise two different chats' unrelated messages could collide on the
+  // same numeric ID and misroute a reply to the wrong conversation.
+  telegramMessageIds: Array<{ chatId: string; messageId: number }>;
 }
 
 const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL;
@@ -31,7 +36,7 @@ const useUpstash = !!(UPSTASH_URL && UPSTASH_TOKEN);
 
 // In-memory fallback store (local dev only — see note above).
 const memoryConversations = new Map<string, ConversationRecord>();
-const memoryReplyIndex = new Map<number, string>();
+const memoryReplyIndex = new Map<string, string>();
 const memoryEmailIndex = new Map<string, string>();
 
 // Conversations self-expire after 3 days of inactivity. The TTL is refreshed
@@ -52,7 +57,10 @@ async function getRedis() {
 }
 
 const conversationKey = (id: string) => `chat:conv:${id}`;
-const replyIndexKey = (telegramMessageId: number) => `chat:tgmsg:${telegramMessageId}`;
+// Scoped by chatId — message IDs are only unique within a single Telegram
+// chat, and TELEGRAM_CHAT_ID can now list more than one owner chat.
+const replyIndexKey = (chatId: string | number, telegramMessageId: number) =>
+  `chat:tgmsg:${chatId}:${telegramMessageId}`;
 const emailIndexKey = (email: string) => `chat:email:${normalizeEmail(email)}`;
 
 export async function getConversation(conversationId: string): Promise<ConversationRecord | null> {
@@ -110,32 +118,34 @@ export async function appendMessage(
 }
 
 export async function recordTelegramMessageMapping(
+  chatId: string | number,
   telegramMessageId: number,
   conversationId: string
 ): Promise<void> {
   if (useUpstash) {
     const redis = await getRedis();
-    await redis.set(replyIndexKey(telegramMessageId), conversationId);
+    await redis.set(replyIndexKey(chatId, telegramMessageId), conversationId);
   } else {
-    memoryReplyIndex.set(telegramMessageId, conversationId);
+    memoryReplyIndex.set(`${chatId}:${telegramMessageId}`, conversationId);
   }
 
   const record = await getConversation(conversationId);
   if (record) {
-    record.telegramMessageIds.push(telegramMessageId);
+    record.telegramMessageIds.push({ chatId: String(chatId), messageId: telegramMessageId });
     await saveConversation(record);
   }
 }
 
 export async function getConversationIdByTelegramMessageId(
+  chatId: string | number,
   telegramMessageId: number
 ): Promise<string | null> {
   if (useUpstash) {
     const redis = await getRedis();
-    const value = await redis.get(replyIndexKey(telegramMessageId));
+    const value = await redis.get(replyIndexKey(chatId, telegramMessageId));
     return (value as string) ?? null;
   }
-  return memoryReplyIndex.get(telegramMessageId) ?? null;
+  return memoryReplyIndex.get(`${chatId}:${telegramMessageId}`) ?? null;
 }
 
 // Resume-by-email lookup, mirroring getConversationIdByTelegramMessageId.
@@ -164,16 +174,16 @@ export async function deleteConversation(conversationId: string): Promise<boolea
     if (record.visitorEmail) {
       await redis.del(emailIndexKey(record.visitorEmail));
     }
-    for (const tgMsgId of record.telegramMessageIds) {
-      await redis.del(replyIndexKey(tgMsgId));
+    for (const { chatId, messageId } of record.telegramMessageIds) {
+      await redis.del(replyIndexKey(chatId, messageId));
     }
   } else {
     memoryConversations.delete(conversationId);
     if (record.visitorEmail) {
       memoryEmailIndex.delete(normalizeEmail(record.visitorEmail));
     }
-    for (const tgMsgId of record.telegramMessageIds) {
-      memoryReplyIndex.delete(tgMsgId);
+    for (const { chatId, messageId } of record.telegramMessageIds) {
+      memoryReplyIndex.delete(`${chatId}:${messageId}`);
     }
   }
   return true;

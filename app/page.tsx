@@ -6,6 +6,7 @@ import HeroSection from './components/HeroSection';
 import IndustriesCarousel from './components/IndustriesCarousel';
 import ContactSection from './components/ContactSection';
 import ChatWidget from './components/ChatWidget';
+import PriorityLineModal from './components/PriorityLineModal';
 import SiteFooter from './components/SiteFooter';
 
 // Home-route metadata. The default English copy is what crawlers see in the
@@ -37,6 +38,12 @@ export default function HomePage() {
       </main>
 
       <ChatWidget />
+
+      {/* Overlay, not a route: opened by the Priority Line inset inside
+          ContactSection's Boris banner (via a window event — see
+          PriorityLineModal.tsx), mounted here with the other page-level
+          overlays/widgets. */}
+      <PriorityLineModal />
 
       <SiteFooter />
     </SiteProvider>

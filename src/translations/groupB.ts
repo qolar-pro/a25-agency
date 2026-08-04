@@ -1,6 +1,6 @@
-import { TranslationKeys } from './types';
+import { TranslationKeys, PartialTranslationKeys } from './types';
 
-export const SR: TranslationKeys = {
+export const SR: PartialTranslationKeys = {
   brand: "A25",
   slogan: "Bilateralni koridor",
   tagline: "Povezivanje Makedonskih Preduzeća sa Proverenim Radnicima sa Balkana",
@@ -82,7 +82,7 @@ export const SR: TranslationKeys = {
   simulatedMessage: "Simulirani režim: Podesite RESEND_API_KEY u Secrets za stvarno slanje imejlova."
 };
 
-export const BG: TranslationKeys = {
+export const BG: PartialTranslationKeys = {
   brand: "А25",
   slogan: "Двустранен коридор",
   tagline: "Свързване на Македонски Бизнеси с Проверени Балкански Работници",
@@ -164,7 +164,7 @@ export const BG: TranslationKeys = {
   simulatedMessage: "Симулиран режим: Настройте RESEND_API_KEY в Secrets за реално изпращане на писма."
 };
 
-export const HR: TranslationKeys = {
+export const HR: PartialTranslationKeys = {
   brand: "A25",
   slogan: "Bilateralni koridor",
   tagline: "Povezivanje Makedonskih Tvrtki s Provjerenim Radnicima s Balkana",
@@ -246,7 +246,7 @@ export const HR: TranslationKeys = {
   simulatedMessage: "Simulirani rad: Podesite RESEND_API_KEY u Secrets postavkama za stvarni imejl prijenos."
 };
 
-export const RU: TranslationKeys = {
+export const RU: PartialTranslationKeys = {
   brand: "A25",
   slogan: "Двусторонний коридор",
   tagline: "Связующее Звено между Македонским Бизнесом и Проверенными Кадрами с Балкан",
@@ -418,10 +418,52 @@ export const PL: TranslationKeys = {
   optYes: "Tak / Po",
   optNo: "Nie / Jo",
   directLine: "Bezpośrednia Linia",
-  simulatedMessage: "Tryb symulacyjny: Ustaw klucz RESEND_API_KEY w panelu Secrets, aby uruchomić realną wysyłkę e-maili."
+  simulatedMessage: "Tryb symulacyjny: Ustaw klucz RESEND_API_KEY w panelu Secrets, aby uruchomić realną wysyłkę e-maili.",
+  priorityEyebrow: "[04 // PRIORITY LINE]",
+  priorityTitle: "Przejdź na początek kolejki",
+  priorityPitch: "Każde zgłoszenie przechodzi te same kontrole. Priority Line zmienia tylko Twoje miejsce w kolejce: Twoje dokumenty są rozpatrywane przed innymi kandydatami na każdym etapie, a dodatkowo rozmawiasz na żywo przez WhatsApp z Borisem Vchkovem, który prowadzi A25 — to nie automatyczna odpowiedź, a prawdziwa rozmowa o Twojej sprawie.",
+  priorityBullet1: "Rozpatrzenie przed innymi kandydatami na każdym etapie procesu.",
+  priorityBullet2: "Rozmowa na żywo przez WhatsApp z Borisem Vchkovem, założycielem A25.",
+  priorityBullet3: "Jedna opłata za zgłoszenie — bez abonamentu.",
+  priorityPrice: "€9.99",
+  priorityPriceNote: "jednorazowo, za zgłoszenie",
+  priorityCta: "Dołącz do Priority Line",
+  priorityCtaNote: "Jeszcze nie działa — zostaw dane i wejdziesz pierwszy, gdy wystartuje. Dziś nic nie pobieramy.",
+  priorityFormTitle: "Priority Line — zgłoś zainteresowanie",
+  priorityFormIntro: "Wyślemy Ci e-mailem 6-cyfrowy kod, żeby potwierdzić adres. Na tym etapie nic nie pobieramy.",
+  priorityLabelFirstName: "Imię",
+  priorityLabelSurname: "Nazwisko",
+  priorityLabelEmail: "E-mail",
+  priorityLabelCountry: "Kraj, z którego się zgłaszasz",
+  priorityLabelProfession: "Twoja branża",
+  priorityProfessionPlaceholder: "Wybierz branżę",
+  priorityProfessionOther: "Inne / brak na liście",
+  priorityLabelPassport: "Status paszportu",
+  priorityPassportNone: "Nie mam jeszcze paszportu",
+  priorityPassportPassport: "Paszport (nie biometryczny)",
+  priorityPassportBiometric: "Paszport biometryczny",
+  priorityLabelWhatsapp: "Numer WhatsApp",
+  priorityOptional: "opcjonalnie",
+  priorityFormSubmit: "Wyślij mi kod",
+  priorityFormSubmitting: "Wysyłanie...",
+  priorityFormError: "Coś poszło nie tak. Spróbuj ponownie.",
+  priorityOtpTitle: "Sprawdź skrzynkę",
+  priorityOtpDesc: "Wysłaliśmy 6-cyfrowy kod na {email}. Jest ważny 15 minut.",
+  priorityOtpLabel: "6-cyfrowy kod",
+  priorityOtpVerify: "Potwierdź",
+  priorityOtpVerifying: "Sprawdzanie...",
+  priorityOtpBack: "Wróć — poproś o nowy kod",
+  priorityOtpErrorExpired: "Ten kod wygasł. Wróć, a wyślemy nowy.",
+  priorityOtpErrorWrong: "Ten kod się nie zgadza. Sprawdź e-mail i spróbuj ponownie.",
+  priorityOtpErrorTooMany: "Zbyt wiele błędnych prób. Wróć i wyślij formularz ponownie, aby otrzymać nowy kod.",
+  priorityDoneTitle: "Jesteś na liście",
+  priorityDoneBody: "Dziękujemy za zainteresowanie — Priority Line ruszy już bardzo niedługo (kończymy prace techniczne). Nic nie zostało pobrane. Napiszemy, gdy tylko wystartuje, a osoby z tej listy mają pierwszeństwo.",
+  priorityDoneIdLabel: "Twój numer zgłoszenia",
+  priorityBtnClose: "Zamknij",
+  priorityBtnContinue: "Powrót do strony"
 };
 
-export const SL: TranslationKeys = {
+export const SL: PartialTranslationKeys = {
   brand: "A25",
   slogan: "Bilateralni koridor",
   tagline: "Povezovanje Makedonskih Podjetij s Preverjenimi Delavci z Balkana",

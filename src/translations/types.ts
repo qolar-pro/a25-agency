@@ -141,7 +141,78 @@ export interface TranslationKeys {
   statIndustriesLabel?: string;
   statLaunchValue?: string;
   statLaunchLabel?: string;
+  // Phase 8f — "Priority Line" demand test (homepage section + 3-step modal).
+  // These are REQUIRED, not optional: they're written out per language in
+  // primary.ts (EN/MK/AL/DE), groupA.ts (ES/EL), groupB.ts (PL) and
+  // groupC.ts (SV), so a missing translation is a type error rather than an
+  // English string silently leaking into another language at runtime. New keys
+  // deliberately do NOT go through the EXTRA_DATA/getFallback shim in
+  // src/translations.ts — that mechanism is legacy (it already carries one
+  // never-read entry) and shouldn't be grown.
+  //
+  // Copy rule for this set: nothing may read as a completed purchase. The
+  // feature is not live, nothing is charged — the pitch is honest and so is
+  // the ending (see Phase 8's ground-truth note in a25-claude-code-prompt.md).
+  priorityEyebrow: string;
+  priorityTitle: string;
+  priorityPitch: string;
+  priorityBullet1: string;
+  priorityBullet2: string;
+  priorityBullet3: string;
+  priorityPrice: string;
+  priorityPriceNote: string;
+  priorityCta: string;
+  priorityCtaNote: string;
+  priorityFormTitle: string;
+  priorityFormIntro: string;
+  priorityLabelFirstName: string;
+  priorityLabelSurname: string;
+  priorityLabelEmail: string;
+  priorityLabelCountry: string;
+  priorityLabelProfession: string;
+  priorityProfessionPlaceholder: string;
+  priorityProfessionOther: string;
+  priorityLabelPassport: string;
+  priorityPassportNone: string;
+  priorityPassportPassport: string;
+  priorityPassportBiometric: string;
+  priorityLabelWhatsapp: string;
+  priorityOptional: string;
+  priorityFormSubmit: string;
+  priorityFormSubmitting: string;
+  priorityFormError: string;
+  priorityOtpTitle: string;
+  // Carries a literal "{email}" token the modal substitutes at render time —
+  // the translation set is flat strings, so interpolation happens in the UI.
+  priorityOtpDesc: string;
+  priorityOtpLabel: string;
+  priorityOtpVerify: string;
+  priorityOtpVerifying: string;
+  priorityOtpBack: string;
+  priorityOtpErrorExpired: string;
+  priorityOtpErrorWrong: string;
+  priorityOtpErrorTooMany: string;
+  priorityDoneTitle: string;
+  priorityDoneBody: string;
+  priorityDoneIdLabel: string;
+  priorityBtnClose: string;
+  priorityBtnContinue: string;
 }
+
+/**
+ * Type for the LEGACY, never-imported language sets that still sit in
+ * groupA/groupB/groupC.ts (IT, FR, PT, RO, SR, BG, HR, RU, SL, NL, HU, TR, AR,
+ * HI, ZH, JA, KO). Only 8 languages are supported and wired up in
+ * src/translations.ts — EN/MK/AL/DE/ES/EL/PL/SV — and per CLAUDE.md that set of
+ * 8 is the source of truth; these leftovers must NOT be extended to match every
+ * new feature's copy.
+ *
+ * They're typed as a partial set so that adding a required key to
+ * `TranslationKeys` (as Phase 8f does) is a type error only where it matters —
+ * in the 8 real languages — instead of demanding 17 translations nobody reads.
+ * Nothing imports these exports; deleting them is a separate cleanup.
+ */
+export type PartialTranslationKeys = Partial<TranslationKeys>;
 
 export const LANGUAGE_DETAILS: Record<Language, { label: string; flag: string; native: string }> = {
   EN: { label: "English", flag: "🇬🇧", native: "English" },

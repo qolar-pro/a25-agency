@@ -18,6 +18,7 @@ import {
 import { chatReceivedEmail } from "./chatEmailTemplates.js";
 import { sendEmailViaResend } from "./email.js";
 import { detectFromHeader, rememberLanguage } from "./languageDetect.js";
+import { getOwnerChatIds, sendTelegramMessage } from "./telegram.js";
 
 export async function processChatMessage(req: any, res: any) {
   const { conversationId, name, email, message } = req.body ?? {};
@@ -75,10 +76,11 @@ export async function processChatMessage(req: any, res: any) {
   });
 
   const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-  const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+  // Owner chat list (comma-separated TELEGRAM_CHAT_ID) — parsed by the shared
+  // helper in lib/telegram.ts, same list the owner-command gate in
+  // lib/chatReplyWebhook.ts checks against.
+  const CHAT_IDS = getOwnerChatIds();
 
-  // Plain text only — no parse_mode. Markdown/HTML mode would choke on
-  // unescaped visitor input like "*", "_", or "<" and fail the whole send.
   const text = `From: ${conversation.visitorName} (${conversation.visitorEmail})\nID: ${conversationId}\n\n${message}`;
 
   const finish = async (result: { simulated: boolean; message?: string; error?: string }) => {
@@ -93,7 +95,7 @@ export async function processChatMessage(req: any, res: any) {
     });
   };
 
-  if (!BOT_TOKEN || !CHAT_ID) {
+  if (!BOT_TOKEN || CHAT_IDS.length === 0) {
     console.log("[A25 CHAT WIDGET] TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID missing — simulating locally:");
     console.log(text);
     return finish({
@@ -102,42 +104,34 @@ export async function processChatMessage(req: any, res: any) {
     });
   }
 
-  try {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 5000);
+  // Fan out to every configured chat independently — one owner's chat being
+  // unreachable (blocked the bot, etc.) must not stop delivery to the others.
+  // The loop stays here (rather than in lib/telegram.ts) because this caller is
+  // the only one that needs each chat's message_id back, to build the
+  // reply-mapping index that routes owner replies to the right conversation.
+  const sends = await Promise.all(
+    CHAT_IDS.map(async chatId => {
+      const result = await sendTelegramMessage(chatId, text);
 
-    const telegramResponse = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: CHAT_ID, text }),
-      signal: controller.signal
-    });
-    clearTimeout(timeoutId);
-
-    const data: any = await telegramResponse.json();
-
-    if (telegramResponse.ok && data.ok) {
-      console.log(`[A25 CHAT WIDGET] Message delivered to Telegram chat ${CHAT_ID}.`);
-      // Record which Telegram message this was, so a "Reply" to it in
-      // Telegram can be routed back to this exact conversation later.
-      if (data.result?.message_id) {
-        await recordTelegramMessageMapping(data.result.message_id, conversationId);
+      if (result.ok) {
+        console.log(`[A25 CHAT WIDGET] Message delivered to Telegram chat ${chatId}.`);
+        if (result.messageId) {
+          await recordTelegramMessageMapping(chatId, result.messageId, conversationId);
+        }
       }
-      return finish({ simulated: false });
-    }
 
-    console.error("[A25 CHAT WIDGET] Telegram API error:", data);
-    return finish({
-      simulated: true,
-      message: "Message received but delivery is delayed. We will still follow up.",
-      error: data.description || "Telegram API error"
-    });
-  } catch (err: any) {
-    console.error("[A25 CHAT WIDGET] Telegram dispatch failed:", err.message);
-    return finish({
-      simulated: true,
-      message: "Message received but delivery is delayed. We will still follow up.",
-      error: err.message
-    });
+      return result;
+    })
+  );
+
+  const anySucceeded = sends.some(s => s.ok);
+  if (anySucceeded) {
+    return finish({ simulated: false });
   }
+
+  return finish({
+    simulated: true,
+    message: "Message received but delivery is delayed. We will still follow up.",
+    error: sends[0]?.error || "Telegram API error"
+  });
 }

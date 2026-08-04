@@ -16,8 +16,12 @@ import {
   MapPin,
   Award,
   Shield,
+  Zap,
+  Check,
 } from 'lucide-react';
+import { track } from '@vercel/analytics';
 import { useSite } from './SiteProvider';
+import { openPriorityLineModal } from './PriorityLineModal';
 
 interface LedgerItem {
   id: string;
@@ -300,36 +304,79 @@ export default function ContactSection() {
 
   return (
     <section id="contact-desk" className="pt-6 border-t border-zinc-200 space-y-8">
-      {/* Executive Direct Contact Hub Banner */}
-      <div className="panel-glow reveal relative overflow-hidden bg-gradient-to-br from-blue-650 via-blue-700 to-blue-900 text-white rounded-2xl p-6 sm:p-8 shadow-xl border border-blue-600/50 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-        <div className="space-y-2 max-w-2xl">
-          <span className="inline-flex items-center gap-1.5 bg-amber-500/10 text-amber-500 text-[9px] font-mono font-bold uppercase tracking-widest px-2.5 py-1 rounded border border-amber-500/20">
-            {t.secureLine}
-          </span>
-          <h3 className="text-xl sm:text-2xl font-extrabold uppercase tracking-tight">
-            Boris Vchkov{' '}
-            <span className="text-zinc-500 font-mono font-normal text-xs lowercase block sm:inline sm:ml-2">
-              {t.ownerDesk}
+      {/* Priority Line is the main event on this card now — Boris's free
+          call/email channel is folded in underneath as a smaller secondary
+          option, not a separate banner. (Earlier draft had this the other way
+          around; flipped per direct feedback.) */}
+      <div className="panel-glow reveal relative overflow-hidden bg-gradient-to-br from-blue-650 via-blue-700 to-blue-900 text-white rounded-2xl p-6 sm:p-8 shadow-xl border border-blue-600/50 flex flex-col gap-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div className="space-y-2 max-w-2xl">
+            <span className="inline-flex items-center gap-1.5 bg-amber-500/10 text-amber-500 text-[9px] font-mono font-bold uppercase tracking-widest px-2.5 py-1 rounded border border-amber-500/20">
+              <Zap className="w-3 h-3" />
+              {t.priorityEyebrow}
             </span>
-          </h3>
-          <p className="text-zinc-300 text-xs leading-relaxed font-sans">{t.execDeskDesc}</p>
+            <h3 className="text-xl sm:text-2xl font-extrabold uppercase tracking-tight">
+              {t.priorityTitle}
+            </h3>
+            <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed font-sans max-w-xl">
+              {t.priorityPitch}
+            </p>
+          </div>
+
+          <div className="shrink-0 w-full md:w-64 rounded-xl border border-white/15 bg-white/5 p-5 space-y-3 text-center">
+            <div>
+              <p className="text-3xl sm:text-4xl font-extrabold tracking-tight">{t.priorityPrice}</p>
+              <p className="text-[10px] font-mono uppercase tracking-widest text-zinc-400 mt-1">
+                {t.priorityPriceNote}
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                track('priority_line_cta_click', { source: 'contact_section' });
+                openPriorityLineModal();
+              }}
+              className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-amber-500 hover:bg-amber-600 text-zinc-950 font-mono text-[11px] font-bold uppercase tracking-wider rounded-xl transition-colors"
+            >
+              <Zap className="w-3.5 h-3.5" />
+              {t.priorityCta}
+            </button>
+            <p className="text-[10px] leading-snug text-zinc-400">{t.priorityCtaNote}</p>
+          </div>
         </div>
 
-        <div className="flex flex-wrap sm:flex-nowrap gap-3 shrink-0 w-full md:w-auto">
-          <a
-            href="tel:+38971326293"
-            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-mono text-[10px] font-bold uppercase tracking-wider rounded-xl transition-all"
-          >
-            <PhoneCall className="w-4 h-4 text-blue-600" />
-            <span>+389 71 326 293</span>
-          </a>
-          <a
-            href="mailto:contact@a25.mk"
-            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-950 font-mono text-[10px] font-bold uppercase tracking-wider rounded-xl transition-all"
-          >
-            <Mail className="w-4 h-4 text-blue-600" />
-            <span>contact@a25.mk</span>
-          </a>
+        <ul className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {[t.priorityBullet1, t.priorityBullet2, t.priorityBullet3].map((text, i) => (
+            <li key={i} className="flex items-start gap-2 rounded-lg bg-white/5 border border-white/10 p-3">
+              <span className="mt-0.5 h-4 w-4 shrink-0 rounded-full bg-amber-500/15 text-amber-400 flex items-center justify-center">
+                <Check className="w-2.5 h-2.5" />
+              </span>
+              <span className="text-[11px] sm:text-xs text-zinc-200 leading-snug">{text}</span>
+            </li>
+          ))}
+        </ul>
+
+        {/* Secondary, smaller — email only. The phone number was intentionally
+            dropped: a free direct line to Boris undercuts the paid Priority
+            Line above it now that talking to him is the thing being
+            monetized. Email stays as a low-stakes written-inquiry channel,
+            not a live conversation. */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-lg border border-white/10 bg-black/10 p-3 sm:p-3.5">
+          <div className="text-[11px] text-zinc-300 leading-snug">
+            <span className="font-mono uppercase tracking-wide text-zinc-400">{t.secureLine}</span>
+            {' — '}
+            <span className="font-bold text-white">Boris Vchkov</span>{' '}
+            <span className="text-zinc-400">({t.ownerDesk})</span>
+          </div>
+          <div className="flex flex-wrap gap-2 shrink-0">
+            <a
+              href="mailto:contact@a25.mk"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white font-mono text-[10px] font-bold uppercase tracking-wide rounded-lg transition-colors"
+            >
+              <Mail className="w-3 h-3" />
+              <span>contact@a25.mk</span>
+            </a>
+          </div>
         </div>
       </div>
 
