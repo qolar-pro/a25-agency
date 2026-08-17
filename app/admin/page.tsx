@@ -74,14 +74,17 @@ export default async function AdminDashboard({
               Every enquiry the site has ever received, in one place.
             </p>
           </div>
-          <form action="/api/admin/login" method="POST">
-            <input type="hidden" name="_method" value="DELETE" />
-            <Link
-              href="/admin/login"
+          {/* A real submit button, not a link: the previous version was a
+              <Link> inside this form, which navigated to the login page without
+              ever submitting it — so the session cookie survived the "sign out"
+              and /admin was still reachable. */}
+          <form action="/api/admin/logout" method="POST">
+            <button
+              type="submit"
               className="rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-700 transition hover:bg-zinc-50"
             >
               Sign out
-            </Link>
+            </button>
           </form>
         </header>
 

@@ -19,13 +19,18 @@ export async function runSharedHandler(request: Request, handler: SharedHandler)
 
   // JSON body for methods that carry one. The lib handlers all expect an
   // already-parsed object on req.body (just like Vercel/Express give them).
+  // Falls back to {} rather than undefined on unparseable or empty input. The
+  // shared handlers all destructure req.body immediately, so undefined threw a
+  // TypeError before any validation ran — turning "malformed JSON" into an
+  // opaque 500 instead of the handler's own 400 with a usable message. Found by
+  // a pentest of the live site.
   let body: unknown;
   if (method !== 'GET' && method !== 'HEAD') {
     try {
       const raw = await request.text();
-      body = raw ? JSON.parse(raw) : undefined;
+      body = raw ? JSON.parse(raw) : {};
     } catch {
-      body = undefined;
+      body = {};
     }
   }
 

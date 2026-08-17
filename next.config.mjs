@@ -25,6 +25,37 @@ const nextConfig = {
     '/api/chat': ['./node_modules/geoip-lite/data/*.dat'],
     '/api/telegram-webhook': ['./node_modules/geoip-lite/data/*.dat'],
   },
+  // Security headers. A pentest of the live site found only HSTS present.
+  //
+  // Deliberately NOT including a Content-Security-Policy here: the site loads
+  // Google Fonts, Unsplash imagery, GSAP/Lenis and Vercel Analytics, and a CSP
+  // written blind would very likely break production on deploy. That one needs
+  // to be built in report-only mode first and promoted once the reports are
+  // clean — a separate, testable piece of work, not a line added here.
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          // Clickjacking. Nothing on this site is meant to be framed, and the
+          // /admin dashboard is the page where being framed would matter.
+          { key: 'X-Frame-Options', value: 'DENY' },
+          // Stop the browser second-guessing declared content types — the CSV
+          // export in particular should never be sniffed into something else.
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          // /track/<token> carries a secret token IN THE URL. Without this, that
+          // token is sent in the Referer header to any third-party host the page
+          // touches. Same for /admin URLs. Send the origin only, cross-origin.
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          // No page here uses these; denying them costs nothing.
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=()'
+          }
+        ]
+      }
+    ];
+  },
   webpack: (config) => {
     // The shared logic layer in lib/*.ts imports siblings with an explicit
     // `.js` extension (NodeNext/ESM convention). Teach webpack to resolve

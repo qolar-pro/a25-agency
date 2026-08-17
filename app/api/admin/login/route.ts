@@ -52,10 +52,5 @@ export async function POST(request: Request) {
   return response;
 }
 
-// Sign out.
-export async function DELETE(request: Request) {
-  const origin = new URL(request.url).origin;
-  const response = NextResponse.redirect(`${origin}/admin/login`, { status: 303 });
-  response.cookies.set(ADMIN_COOKIE, "", { path: "/", maxAge: 0 });
-  return response;
-}
+// Sign-out lives at /api/admin/logout — a browser form cannot issue a DELETE,
+// which is why the old handler here was unreachable from the UI.

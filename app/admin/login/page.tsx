@@ -9,9 +9,9 @@ export const metadata: Metadata = {
 export default async function AdminLogin({
   searchParams
 }: {
-  searchParams: Promise<{ error?: string; left?: string }>;
+  searchParams: Promise<{ error?: string; left?: string; signedout?: string }>;
 }) {
-  const { error, left } = await searchParams;
+  const { error, left, signedout } = await searchParams;
   const configured = !!process.env.ADMIN_PASSWORD;
 
   return (
@@ -48,6 +48,9 @@ export default async function AdminLogin({
               autoComplete="current-password"
               className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2 text-zinc-900 outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
             />
+            {signedout ? (
+              <p className="mt-3 text-sm text-emerald-700">You have been signed out.</p>
+            ) : null}
             {error === "locked" ? (
               <p className="mt-3 text-sm text-red-600">
                 Too many failed attempts. Sign-in is locked for 15 minutes.
