@@ -16,6 +16,8 @@
 // must attach Upstash for the Telegram → track-page flow to work at all.
 
 import type { Language } from "./languageDetect.js";
+import { safeWrite } from "./archive/db.js";
+import { archiveOrder } from "./archive/store.js";
 
 // Status lifecycle. `started` is the initial state at createOrder; the four
 // updatable statuses match the /order update contract (pending / accepted /
@@ -77,6 +79,12 @@ function generateToken(): string {
 }
 
 async function saveOrder(record: OrderRecord, ttlSeconds?: number): Promise<void> {
+  // Write-through to the permanent archive — see the equivalent note in
+  // lib/chatStore.ts. This matters most on the `done` transition, which is
+  // exactly when the Redis copy gets its 3-day self-delete TTL: the order
+  // history survives in the archive after Redis has dropped it.
+  void safeWrite("order", () => archiveOrder(record));
+
   if (useUpstash) {
     const redis = await getRedis();
     if (ttlSeconds) {

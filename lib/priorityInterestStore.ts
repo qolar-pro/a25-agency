@@ -22,6 +22,8 @@
 // deployments must attach Upstash.
 
 import type { Language } from "./languageDetect.js";
+import { safeWrite } from "./archive/db.js";
+import { archivePriorityLead } from "./archive/store.js";
 
 // One 3-option field, never two booleans — "has passport" + "is biometric"
 // as separate toggles can express the contradictory "no passport but
@@ -124,6 +126,11 @@ export function generateOtpCode(): string {
 }
 
 export async function saveLead(record: PriorityLead): Promise<void> {
+  // Write-through to the permanent archive — see lib/chatStore.ts. The archive
+  // deliberately drops otpCode/otpExpiresAt/otpAttempts; those stay here in
+  // Redis where they expire. Only the lead itself is archived.
+  void safeWrite("priority lead", () => archivePriorityLead(record));
+
   // No TTL, on purpose — see the header note.
   if (useUpstash) {
     const redis = await getRedis();

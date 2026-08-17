@@ -10,7 +10,11 @@ const nextConfig = {
   // (ENOENT on geoip-country.dat), so keep it external: Next loads it from
   // node_modules at runtime with its data files intact. Used by
   // lib/languageDetect.ts's detectFromIP.
-  serverExternalPackages: ['geoip-lite'],
+  // PGlite ships Postgres as a WASM binary plus its own filesystem bundle, both
+  // loaded at runtime relative to the package. Bundling it breaks those lookups
+  // the same way it breaks geoip-lite, so it stays external too. Used by
+  // lib/archive/db.ts.
+  serverExternalPackages: ['geoip-lite', '@electric-sql/pglite'],
   // geoip-lite loads its .dat databases via a runtime fs.readFileSync that the
   // build tracer can't follow, so the data files aren't auto-included in the
   // serverless function bundle. Force-include them for the routes that reach

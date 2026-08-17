@@ -10,6 +10,15 @@ coverage/
 .env*
 !.env.example
 
+# Local lead archive (PGlite data directory) — real customer data, never commit.
+.a25-archive/
+# Backfill snapshots taken before any import runs.
+archive-snapshots/
+# Playwright MCP scratch output (snapshots, console logs, screenshots).
+.playwright-mcp/
+# Vercel CLI project link (contains project + org ids).
+.vercel/
+
 # Internal Claude Code / build planning docs
 .claude/
 CLAUDE.md
@@ -18,3 +27,4 @@ HOW-TO-RUN-THE-BUILD.md
 a25-audit-and-buildplan.md
 a25-claude-code-prompt.md
 docs/
+.vercel

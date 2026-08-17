@@ -16,6 +16,8 @@
 // backend so callers never need to know which is active.
 
 import geoip from "geoip-lite";
+import { safeWrite } from "./archive/db.js";
+import { archiveClientLanguage } from "./archive/store.js";
 
 // The 8 supported language codes. Kept as a local literal (rather than
 // importing the app-side Language type) so this lib module stays free of any
@@ -135,6 +137,10 @@ export async function getKnownLanguage(email: string): Promise<Language | null> 
 export async function rememberLanguage(email: string, lang: Language): Promise<void> {
   if (!email) return;
   const normalized = normalizeLanguage(lang);
+  // Mirror into the archive so /admin can show which language each contact
+  // actually speaks without a second Redis round-trip. Fail-open as everywhere.
+  void safeWrite("client language", () => archiveClientLanguage(email, normalized));
+
   if (useUpstash) {
     const redis = await getRedis();
     await redis.set(clientLangKey(email), normalized);

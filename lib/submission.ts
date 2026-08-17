@@ -2,6 +2,9 @@
 // Shared by the local dev server (server.ts) and the Vercel serverless
 // function (api/submit.ts). Accepts any Express/Vercel-style (req, res) pair.
 
+import { safeWrite } from "./archive/db.js";
+import { archiveSubmission } from "./archive/store.js";
+
 // Exquisite 25-Language Confirmation Dictionary Helper
 function getConfirmationEmail(
   language: string,
@@ -221,6 +224,37 @@ export async function processSubmission(req: any, res: any) {
       message: "Missing key identifier fields (Full Name and Contact Phone are required)." 
     });
   }
+
+  // Persist the lead BEFORE attempting any delivery.
+  //
+  // This is the whole reason lib/archive exists. Until this line, a form
+  // submission was never stored anywhere: it was composed into an email, handed
+  // to Resend, and that email was the only copy in existence. If Resend was
+  // down, if the sender domain was unverified, if the destination mailbox
+  // bounced (a real risk here — see the apex-MX note in CLAUDE.md), or if
+  // someone simply deleted the message, the lead was gone with no trace.
+  //
+  // Archived first and fail-open, so the lead is durable even when every
+  // downstream delivery path fails.
+  void safeWrite("form submission", () =>
+    archiveSubmission({
+      id: `form:${globalThis.crypto.randomUUID()}`,
+      source: "form",
+      kind: type === "EMPLOYER" ? "EMPLOYER" : "CANDIDATE",
+      fullName,
+      companyName,
+      email,
+      phone,
+      sector,
+      country,
+      experience: experience != null ? String(experience) : undefined,
+      hasPassport,
+      notes,
+      language,
+      createdAt: Date.now(),
+      raw: req.body
+    })
+  );
 
   // Construct Email Target
   const destinationEmail = process.env.EMAIL_TO || "contact@a25.mk";

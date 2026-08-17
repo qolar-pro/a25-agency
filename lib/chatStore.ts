@@ -9,6 +9,9 @@
 // deployments must attach Upstash (UPSTASH_REDIS_REST_URL/TOKEN) for the
 // two-way reply flow to work at all.
 
+import { safeWrite } from "./archive/db.js";
+import { archiveConversation } from "./archive/store.js";
+
 export interface ChatMessage {
   role: "visitor" | "owner";
   text: string;
@@ -190,6 +193,14 @@ export async function deleteConversation(conversationId: string): Promise<boolea
 }
 
 async function saveConversation(record: ConversationRecord): Promise<void> {
+  // Write-through to the permanent archive (lib/archive/*). Hooked here rather
+  // than at each call site so every path — create, appendMessage, Telegram
+  // mapping — is covered by one line. Fail-open: Redis remains the source of
+  // truth for the live conversation, and an archive problem must never break a
+  // visitor's chat. Note the archive has no TTL, so the transcript outlives the
+  // 3-day expiry applied to the Redis copy below.
+  void safeWrite("chat conversation", () => archiveConversation(record));
+
   if (useUpstash) {
     const redis = await getRedis();
     // 3-day TTL, refreshed on every save so active chats never expire
