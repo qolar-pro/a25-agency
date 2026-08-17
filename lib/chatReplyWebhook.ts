@@ -127,6 +127,44 @@ async function handleOrderCommand(
 }
 
 export async function processTelegramWebhook(req: any, res: any) {
+  // Prove the request actually came from Telegram before trusting anything in
+  // it.
+  //
+  // Everything below authenticates off req.body.message.chat.id — a value the
+  // caller supplies. This endpoint is publicly reachable, so without this check
+  // anyone can POST a forged body claiming to be an owner chat and then:
+  //   • append a message as "owner" to a real visitor's conversation, which
+  //     also emails that applicant from the A25 domain (the reply path is not
+  //     owner-gated, and it keys off Telegram message ids — small sequential
+  //     integers, so guessing one is trivial);
+  //   • run /close to delete conversations;
+  //   • run /order to create or complete orders and fire client emails.
+  //
+  // Telegram's own mechanism for this is setWebhook's `secret_token`, which it
+  // then sends back on every call as X-Telegram-Bot-Api-Secret-Token.
+  //
+  // TWO-STEP ROLLOUT, deliberately: enforcement only switches on once
+  // TELEGRAM_WEBHOOK_SECRET is set. Rejecting unsigned requests before the
+  // webhook has been re-registered with the same secret would silently break
+  // every owner reply in production. Set the env var and re-register in either
+  // order — mismatched values fail closed, unset fails open with a warning.
+  const expectedSecret = process.env.TELEGRAM_WEBHOOK_SECRET;
+  if (expectedSecret) {
+    const provided = req.headers?.["x-telegram-bot-api-secret-token"];
+    if (provided !== expectedSecret) {
+      console.error("[A25 CHAT WEBHOOK] Rejected request with missing/invalid secret token.");
+      // 200, not 401: a 401 tells a prober the endpoint exists and is guarded.
+      // Telegram ignores the body either way.
+      return res.status(200).json({ ok: true });
+    }
+  } else {
+    console.warn(
+      "[A25 CHAT WEBHOOK] TELEGRAM_WEBHOOK_SECRET is not set — this endpoint " +
+        "is accepting UNAUTHENTICATED requests and owner commands can be forged. " +
+        "See ARCHIVE.md."
+    );
+  }
+
   const messageText: string | undefined = req.body?.message?.text;
   const senderChatId = req.body?.message?.chat?.id;
 

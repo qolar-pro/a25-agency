@@ -163,6 +163,34 @@ some other route. Uses the existing bot and owner-chat list — no new service.
 **Local development sets `TELEGRAM_CHAT_ID=""` in `.env.local`** so testing never
 pings Boris's real phone. Production supplies the real value from Vercel's env.
 
+## Telegram webhook authentication
+
+`/api/telegram-webhook` is publicly reachable and authenticates owner commands
+off `req.body.message.chat.id` — a value the caller supplies. Unauthenticated,
+a forged POST can append messages to a real visitor's conversation (which emails
+that applicant from the A25 domain), delete conversations via `/close`, and
+create or complete orders via `/order`.
+
+`lib/chatReplyWebhook.ts` now checks Telegram's `X-Telegram-Bot-Api-Secret-Token`
+against `TELEGRAM_WEBHOOK_SECRET`. **Enforcement is off until that env var is
+set**, because rejecting unsigned requests before the webhook is re-registered
+would silently break every owner reply.
+
+To turn it on — both steps, in either order:
+
+1. Set `TELEGRAM_WEBHOOK_SECRET` in Vercel (Sensitive, Production + Preview).
+2. Re-register the webhook with the same value:
+
+```bash
+curl -X POST "https://api.telegram.org/bot<BOT_TOKEN>/setWebhook" \
+  -d "url=https://www.a25.mk/api/telegram-webhook" \
+  -d "secret_token=<TELEGRAM_WEBHOOK_SECRET>"
+```
+
+Verify with `https://api.telegram.org/bot<BOT_TOKEN>/getWebhookInfo`, then send
+Boris a test chat message and reply to it from Telegram. Until both are done the
+server logs a warning on every webhook call.
+
 ## Known limitations
 
 - Chat conversations and completed orders that expired from Redis **before** the
