@@ -42,8 +42,45 @@
   --shadow-3xs: 0 1px 1px rgb(0 0 0 / 0.03);
 }
 
+/* ============================================================
+   LENIS SMOOTH SCROLL
+   ============================================================
+   Required by Lenis. The critical rule is the second one: Lenis animates the
+   real scroll position itself, so leaving CSS `scroll-behavior: smooth` on
+   means the browser ALSO tries to smooth the same movement, and the two fight
+   — anchor jumps stutter or land in the wrong place. Lenis adds these classes
+   to <html> itself when it initialises, so this only takes effect when smooth
+   scrolling is actually running (never under reduced motion, where the
+   provider bails out before constructing it). */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+/* Must key off `.lenis`, NOT `.lenis-smooth`. Lenis only carries lenis-smooth
+   while a smooth scroll is actively animating (it's added/removed per scroll
+   state), so the documented `.lenis.lenis-smooth` selector leaves native smooth
+   scrolling enabled the rest of the time — the two then fight over anchor
+   jumps. `.lenis` is present for as long as Lenis is alive, which is exactly
+   the window where native smoothing must be off. !important because
+   scroll-behavior can also be set inline on <html>, which would otherwise win. */
+html.lenis {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+/* An iframe swallowing wheel events desyncs Lenis from the page. */
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
 @layer base {
   html {
+    /* Kept for the no-Lenis path (reduced motion, or if the provider fails to
+       mount). `.lenis.lenis-smooth` overrides it back to auto when Lenis runs. */
     scroll-behavior: smooth;
     /* Keep anchor targets (e.g. #contact-desk) clear of the sticky header. */
     scroll-padding-top: 6rem;
@@ -170,8 +207,12 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 128, 0.16);
-  mix-blend-mode: multiply;
+  /* Was `mix-blend-mode: multiply` over a navy fill. A blend mode on a fixed,
+     full-height layer forces the compositor to re-blend this region against
+     whatever scrolls beneath it, every frame of every scroll. The colour below
+     is the multiply result pre-mixed against the photography, so it looks
+     effectively the same and costs nothing to composite. */
+  background: rgba(10, 10, 74, 0.2);
 }
 @media (max-width: 900px) {
   /* Not enough margin outside the content column on tablets for a real photo
@@ -199,7 +240,10 @@
   z-index: 0;
   pointer-events: none;
   opacity: 0.035;
-  mix-blend-mode: multiply;
+  /* `mix-blend-mode: multiply` removed for the same reason as .site-bg-img — a
+     viewport-sized blend layer is re-composited against the page on every
+     scroll frame. At 3.5% opacity over a near-white background, multiply and
+     normal alpha are visually indistinguishable. */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -230,6 +274,164 @@
   animation: gradient-pan 6s linear infinite;
 }
 
+/* ------------------------------------------------------------
+   HERO HEADLINE — per-letter animated gradient + hover wobble
+   ------------------------------------------------------------
+   The headline needs two things at once: the existing left-to-right
+   animated gradient sweep, AND a per-letter hover transform.
+
+   Those two fight each other. `background-clip: text` paints the
+   background on the *parent* and clips it to the descendant glyphs —
+   transforming a child then moves the glyph out from under the
+   already-painted background, and the letter renders invisible. So the
+   gradient can't live on the <h1> if letters are going to move.
+
+   Fix: give every letter its OWN copy of the gradient, then keep the
+   sweep continuous across the headline by shifting each letter's
+   background-position by its index. `ch` is the width of "0" in the
+   current font, so it's identical for every letter span regardless of
+   the glyph — which makes a per-index offset stable. 0.62ch approximates
+   the average uppercase advance width in Space Grotesk; it only has to
+   be close, since the gradient is smooth and has no hard edges to
+   misalign.
+
+   The pan itself animates a registered custom property on the parent
+   (inherits: true) so all letters read the same value and stay in phase.
+   Without @property support the value stays at its initial 0px and the
+   gradient is simply static — a graceful, still-on-brand degradation. */
+@property --grad-shift {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+.hero-headline {
+  animation: hero-grad-pan 6s linear infinite;
+}
+
+@keyframes hero-grad-pan {
+  from { --grad-shift: 0ch; }
+  to   { --grad-shift: -40ch; }
+}
+
+/* Keeps a word from breaking across lines mid-wobble. */
+.hero-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.hero-letter {
+  display: inline-block;
+  background-image: linear-gradient(
+    100deg,
+    var(--color-blue-950) 0%,
+    var(--color-blue-700) 16%,
+    var(--color-blue-600) 30%,
+    var(--color-blue-500) 44%,
+    var(--color-blue-950) 58%,
+    var(--color-blue-600) 74%,
+    var(--color-blue-500) 88%,
+    var(--color-blue-950) 100%
+  );
+  background-size: 40ch auto;
+  background-position-x: calc(var(--grad-shift) - var(--i) * 0.62ch);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+
+  /* The pop. --lift/--rot/--sc are written per letter from the component: the
+     letter under the cursor takes the full value and its neighbours take a
+     decaying share, so the line moves as one surface.
+
+     Short duration with an overshoot curve is what makes it read as a "pop"
+     rather than the previous soft drift — while the pointer moves, the
+     per-frame writes dominate and the letters track it closely; when it
+     leaves, everything returns to zero at once and the curve springs past
+     rest before settling.
+
+     Deliberately NO `will-change: transform` here. There are ~67 of these
+     spans, and promoting every one to its own compositor layer permanently
+     would cost more in GPU memory and compositing than it saves on a hover
+     that most visitors never trigger. */
+  transform: translate3d(0, var(--lift, 0em), 0) rotate(var(--rot, 0deg))
+    scale(var(--sc, 1));
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ------------------------------------------------------------
+   SCROLL-LINKED TEXT HIGHLIGHT — per-word, computed in CSS
+   ------------------------------------------------------------
+   The container carries --p (progress 0→1), --n (word count) and --f (feather
+   width in words); each word carries its index --i. Every word then solves its
+   own brightness with no JS involvement per frame.
+
+   `--p * --n` is the read head's position in words. Subtracting --i gives this
+   word's distance behind the head; dividing by --f and clamping to 0..1 gives
+   a short per-word ramp. Opacity, not colour — cheap to paint, and over the
+   light page background a dark word at 32% reads as grey. */
+.scroll-hl {
+  color: var(--color-zinc-850);
+}
+
+.scroll-hl-word {
+  /* Deliberately left `inline`. An inline-block here trims the whitespace at
+     its own edges, which ran every word in the paragraph together. Only
+     opacity is animated, and opacity applies fine to inline boxes, so there is
+     nothing to gain from a block-ish display anyway. */
+
+  /* No CSS transition on purpose: brightness is owned by the ScrollTrigger
+     scrub in Reveal.tsx, and a transition would fight a scrubbed tween and
+     reintroduce exactly the lag this was meant to remove.
+
+     Deliberately left fully opaque at rest. The dim state is applied by GSAP's
+     fromTo the moment the scrub initialises, which costs one painted frame at
+     full contrast — but the alternative (dimming here in CSS) means that if
+     GSAP ever fails to load, or a trigger fails to fire, the paragraph is
+     stranded at 28% and effectively unreadable. Copy must never depend on JS
+     to become legible. */
+  opacity: 1;
+}
+
+/* ------------------------------------------------------------
+   PREMIUM CTA SURFACE
+   ------------------------------------------------------------
+   Gives the hero buttons real depth (top-edge sheen + grounded drop
+   shadow) instead of the flat single-fill look. */
+.cta-premium {
+  position: relative;
+  isolation: isolate;
+}
+.cta-premium::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0) 58%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* No custom cursor, deliberately.
+ *
+ * A drawn SVG arrow was built here and removed on purpose. Overriding the
+ * cursor also overrides the pointer size, colour and contrast settings that
+ * Windows and macOS expose as accessibility options — someone who has set a
+ * large high-contrast pointer would silently get a small navy one instead.
+ * That cost lands hardest on the users least able to absorb it, and it buys a
+ * flourish that a large share of A25's traffic (candidates on phones) never
+ * sees at all. The native cursor stays. */
+
+/* Count-up "landing" pop, fired once the number reaches its target. */
+.animate-pop {
+  animation: pop-scale 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes pop-scale {
+  0%   { transform: scale(1); }
+  42%  { transform: scale(1.19); }
+  100% { transform: scale(1); }
+}
+
 /* Synced animated gradient for the blue top bar.
    Same keyframe + duration as .text-gradient-animated so they cycle together. */
 .bar-animated {
@@ -252,11 +454,18 @@
   to { background-position: -200% center; }
 }
 
-/* Glassmorphic surface */
+/* Glassmorphic surface.
+   backdrop-filter is the most expensive property on this page after the
+   particle canvas: each element using it makes the compositor read back and
+   re-filter the region behind it while that region scrolls, and there are a
+   dozen-plus of these on screen at once. Blur reduced from 14px and the
+   saturate() pass dropped entirely (it was doing almost nothing at 72% white
+   coverage), with the fill raised slightly to keep the surface reading as
+   solid. Visually near-identical, materially cheaper to scroll. */
 .card-glass {
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(14px) saturate(150%);
-  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 /* Smooth lift on hover */
@@ -358,11 +567,18 @@
   .animate-float,
   .animate-glow-pulse,
   .panel-glow::before,
-  .animate-fade-up {
+  .animate-fade-up,
+  .hero-headline,
+  .animate-pop {
     animation: none !important;
   }
   .reveal { opacity: 1; transform: none; transition: none; }
   .hover-lift { transition: none; }
+  /* Keep the letters legible and still — no pop, no transform. (The component
+     also bails out of its pointer wiring entirely under reduced motion, so
+     the custom properties never get written; this is the belt-and-braces.) */
+  .hero-letter { transition: none; transform: none; }
+  .scroll-hl-word { transition: none; opacity: 1; }
 }
 
 /* Custom scrollbar config for technical loggers */

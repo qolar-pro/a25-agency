@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useSite } from './SiteProvider';
 import { INDUSTRIES } from './industriesData';
 import IndustryModal from './IndustryModal';
+import SectionLabel, { parseSectionLabel } from './ui/SectionLabel';
 
 // Industries carousel — 7 real sector cards (Phase 3), centered auto-cycling
 // postcard carousel. Carousel state (index, paused, auto-cycle) and the
@@ -36,11 +37,12 @@ export default function IndustriesCarousel() {
   }, [industriesPaused, modalOpen]);
 
   return (
-    <div className="reveal space-y-6">
-      <div className="text-center max-w-2xl mx-auto">
-        <span className="text-[10px] font-mono text-blue-600 tracking-widest uppercase font-bold block">
-          {t.sectorsSectionLabel || '[03 // SECTORS]'}
-        </span>
+    <div className="space-y-6">
+      <div data-reveal className="text-center max-w-2xl mx-auto">
+        <SectionLabel
+          {...parseSectionLabel(t.sectorsSectionLabel || '[03 // SECTORS]')}
+          className="justify-center"
+        />
         <h3 className="text-lg sm:text-xl font-bold uppercase tracking-tight text-zinc-950 mt-1">
           {t.sectorsSectionTitle || 'Industries We Work With'}
         </h3>
@@ -61,28 +63,65 @@ export default function IndustriesCarousel() {
 
             const isCenter = diff === 0;
             const isSide = Math.abs(diff) === 1;
-            const x = diff * 220;
-            const scale = isCenter ? 1 : isSide ? 0.86 : 0.7;
-            const opacity = isCenter ? 1 : isSide ? 0.92 : 0;
+
+            // Deck geometry. The side cards sit lower, smaller and slightly
+            // rotated so the active card reads as lifted off a stack rather
+            // than as one of three equal cards in a row.
+            const x = diff * 235;
+            const scale = isCenter ? 1 : isSide ? 0.87 : 0.72;
+            // Cards behind are fully opaque — previously they sat at 0.92 over
+            // a translucent .card-glass surface, so the card underneath showed
+            // straight through and the stack looked like a printing error.
+            const opacity = isSide || isCenter ? 1 : 0;
             const zIndex = isCenter ? 30 : isSide ? 20 : 10;
+            const rotate = isCenter ? 0 : diff > 0 ? 3.5 : -3.5;
+            const y = isCenter ? 0 : 14;
 
             return (
               <motion.div
                 key={ind.key}
-                animate={{ x, scale, opacity }}
+                animate={{ x, y, scale, opacity, rotate }}
                 transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                 style={{ zIndex }}
-                className={`absolute inset-0 m-auto w-[280px] sm:w-[340px] md:w-[380px] aspect-[3/2] card-glass border border-zinc-200/70 rounded-2xl shadow-xs p-6 sm:p-8 flex flex-col items-center justify-center text-center gap-2.5 ${isCenter ? '' : 'pointer-events-none'}`}
+                className={`absolute inset-0 m-auto w-[280px] sm:w-[340px] md:w-[380px] aspect-[3/2] rounded-2xl p-6 sm:p-8 flex flex-col items-center justify-center text-center gap-2.5 ${
+                  isCenter
+                    ? // Front: clean solid white, lifted with a deep shadow.
+                      'bg-white border border-zinc-200/80 shadow-[0_28px_60px_-12px_rgba(9,9,25,0.30)] ring-1 ring-black/5'
+                    : // Behind: solid brand amber, no transparency at all.
+                      'bg-amber-500 border border-amber-600/40 shadow-[0_16px_36px_-14px_rgba(9,9,25,0.35)] pointer-events-none'
+                }`}
               >
-                <div className={`h-11 w-11 sm:h-12 sm:w-12 rounded-xl flex items-center justify-center ${ind.iconBg} ${ind.iconColor}`}>
+                <div
+                  className={`h-11 w-11 sm:h-12 sm:w-12 rounded-xl flex items-center justify-center ${
+                    isCenter ? `${ind.iconBg} ${ind.iconColor}` : 'bg-white/25 text-white'
+                  }`}
+                >
                   <ind.icon className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
-                <h4 className="font-bold text-sm sm:text-base text-zinc-900 uppercase tracking-tight">{ind.label[language]}</h4>
-                <p className="text-[11px] sm:text-xs text-zinc-500 leading-relaxed max-w-[240px]">{ind.subtitle[language]}</p>
+                <h4
+                  className={`font-bold text-sm sm:text-base uppercase tracking-tight ${
+                    isCenter ? 'text-zinc-900' : 'text-white'
+                  }`}
+                >
+                  {ind.label[language]}
+                </h4>
+                <p
+                  className={`text-[11px] sm:text-xs leading-relaxed max-w-[240px] ${
+                    isCenter ? 'text-zinc-500' : 'text-white/85'
+                  }`}
+                >
+                  {ind.subtitle[language]}
+                </p>
                 <button
                   type="button"
                   onClick={() => openIndustryModal(i)}
-                  className="mt-1 inline-flex items-center gap-1 text-[11px] font-mono font-bold text-blue-600 hover:text-blue-700 uppercase tracking-wider bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-full transition-colors"
+                  tabIndex={isCenter ? 0 : -1}
+                  aria-hidden={!isCenter}
+                  className={`mt-1 inline-flex items-center gap-1 text-[11px] font-display font-semibold uppercase tracking-[0.14em] px-3.5 py-1.5 rounded-full transition-colors ${
+                    isCenter
+                      ? 'text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100'
+                      : 'text-amber-700 bg-white/90'
+                  }`}
                 >
                   {t.readMore || 'Read More'}
                   <ChevronRight className="w-3 h-3" />

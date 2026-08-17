@@ -3,6 +3,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Language } from '@/src/types';
 import { LANGUAGE_DETAILS, getTranslations, TranslationKeys } from '@/src/translations';
+import { gsap } from 'gsap';
+import { journey } from './motion/journey';
 
 /**
  * Shared, cross-section site state, lifted out of the old single-file App.tsx
@@ -92,43 +94,25 @@ export default function SiteProvider({ children }: { children: React.ReactNode }
     setLanguage(detected);
   }, []);
 
-  // Reveal-on-scroll: fade/slide elements marked with .reveal as they enter
-  // view. Uses a scroll/resize check with a safety pass so content can never
-  // get stuck hidden. (Verbatim from the original App.tsx.)
-  useEffect(() => {
-    const nodes = Array.from(document.querySelectorAll<HTMLElement>('.reveal'));
-    if (nodes.length === 0) return;
-
-    const reveal = () => {
-      const vh = window.innerHeight || document.documentElement.clientHeight;
-      nodes.forEach((n) => {
-        if (n.classList.contains('is-visible')) return;
-        const r = n.getBoundingClientRect();
-        if (r.top < vh - 40 && r.bottom > 0) n.classList.add('is-visible');
-      });
-    };
-
-    reveal();
-    window.addEventListener('scroll', reveal, { passive: true });
-    window.addEventListener('resize', reveal);
-    const safety = window.setTimeout(() => {
-      nodes.forEach((n) => n.classList.add('is-visible'));
-    }, 2500);
-
-    return () => {
-      window.removeEventListener('scroll', reveal);
-      window.removeEventListener('resize', reveal);
-      window.clearTimeout(safety);
-    };
-  }, []);
+  // The old CSS `.reveal` + IntersectionObserver system was removed here: every
+  // section it covered is now on the shared GSAP system
+  // (app/components/motion/Reveal.tsx) via [data-reveal] / [data-reveal-group].
+  // Running both over the same nodes is how elements end up with competing
+  // animations and get stranded invisible, so there is deliberately only one.
 
   // Hero CTAs: jump straight to the relevant form and open it automatically.
   const scrollToForm = (type: 'employer' | 'candidate') => {
-    // The forms section fades in via scroll-triggered reveal (starts at
-    // opacity:0 / translated down). Jumping there immediately — before the
-    // user has ever scrolled near it — would land on a still-invisible
-    // block, which looks like the click did nothing. Force it visible first.
-    document.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-visible'));
+    // The forms section enters via a scroll-triggered reveal, so before this
+    // click it is sitting at autoAlpha:0. Scrolling there normally fires the
+    // trigger on the way and it animates in — but forcing it visible up front
+    // removes any chance of landing on a blank block, which reads as the
+    // click having done nothing. gsap.set wins over the pending `from` tween's
+    // start values, and the tween itself is `once`, so this can't fight it.
+    if (typeof window !== 'undefined') {
+      const groups = document.querySelectorAll<HTMLElement>('[data-reveal-group]');
+      groups.forEach((g) => gsap.set(Array.from(g.children), { autoAlpha: 1, y: 0 }));
+      gsap.set('[data-reveal]', { autoAlpha: 1, y: 0 });
+    }
 
     if (type === 'employer') setEmpFormOpen(true);
     else setCandFormOpen(true);
@@ -143,9 +127,11 @@ export default function SiteProvider({ children }: { children: React.ReactNode }
       requestAnimationFrame(() => {
         const el = document.getElementById(id);
         if (!el) return;
-        const headerOffset = 96;
-        const top = el.getBoundingClientRect().top + window.scrollY - headerOffset;
-        window.scrollTo({ top, behavior: 'smooth' });
+        // Routed through journey.scrollTo rather than window.scrollTo: Lenis
+        // now owns the scroll position and animates toward its own target, so
+        // a direct window.scrollTo gets dragged straight back. journey falls
+        // back to native scrolling when Lenis isn't running (reduced motion).
+        journey.scrollTo(el, { offset: -96 });
       });
     });
   };

@@ -159,6 +159,29 @@ export interface TranslationKeys {
   priorityBullet1: string;
   priorityBullet2: string;
   priorityBullet3: string;
+  // VIP benefit grid — replaced the old three-bullet row when the section was
+  // rebuilt around the fuller Priority Line copy. priorityBullet1-3 above are
+  // now unreferenced in app code; they are kept (translated, in all 8 files)
+  // rather than deleted because the old three-bullet framing is still the
+  // honest short summary of the offer and is worth having on hand for the
+  // confirmation emails. Delete them together, across all 8, if that changes.
+  priorityFeaturesIntro: string;
+  priorityFeature1Title: string;
+  priorityFeature1Desc: string;
+  priorityFeature2Title: string;
+  priorityFeature2Desc: string;
+  priorityFeature3Title: string;
+  priorityFeature3Desc: string;
+  priorityFeature4Title: string;
+  priorityFeature4Desc: string;
+  priorityFeature5Title: string;
+  priorityFeature5Desc: string;
+  priorityValueLine: string;
+  // Collapsible terms. These are the honest limits of a paid service — they
+  // must stay present and translated, never quietly dropped for layout.
+  priorityLegalTitle: string;
+  priorityLegal1: string;
+  priorityLegal2: string;
   priorityPrice: string;
   priorityPriceNote: string;
   priorityCta: string;

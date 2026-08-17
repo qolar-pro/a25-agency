@@ -18,10 +18,16 @@ import {
   Shield,
   Zap,
   Check,
+  MessageSquare,
+  Timer,
+  UserCog,
+  Sparkles,
+  Info,
 } from 'lucide-react';
 import { track } from '@vercel/analytics';
 import { useSite } from './SiteProvider';
 import { openPriorityLineModal } from './PriorityLineModal';
+import SectionLabel, { parseSectionLabel } from './ui/SectionLabel';
 
 interface LedgerItem {
   id: string;
@@ -41,6 +47,8 @@ export default function ContactSection() {
 
   // Custom estimated state for the quick slider
   const [workersCount] = useState<number>(10);
+  // Priority Line terms accordion — collapsed by default.
+  const [priorityLegalOpen, setPriorityLegalOpen] = useState(false);
 
   // Helper to translate our collapse helper texts inside the forms safely.
   const getHelperText = (isOpen: boolean) => {
@@ -308,80 +316,160 @@ export default function ContactSection() {
           call/email channel is folded in underneath as a smaller secondary
           option, not a separate banner. (Earlier draft had this the other way
           around; flipped per direct feedback.) */}
-      <div className="panel-glow reveal relative overflow-hidden bg-gradient-to-br from-blue-650 via-blue-700 to-blue-900 text-white rounded-2xl p-6 sm:p-8 shadow-xl border border-blue-600/50 flex flex-col gap-6">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <div className="space-y-2 max-w-2xl">
-            <span className="inline-flex items-center gap-1.5 bg-amber-500/10 text-amber-500 text-[9px] font-mono font-bold uppercase tracking-widest px-2.5 py-1 rounded border border-amber-500/20">
-              <Zap className="w-3 h-3" />
-              {t.priorityEyebrow}
-            </span>
-            <h3 className="text-xl sm:text-2xl font-extrabold uppercase tracking-tight">
+      <div data-reveal className="panel-glow relative overflow-hidden bg-gradient-to-br from-blue-650 via-blue-700 to-blue-900 text-white rounded-2xl p-6 sm:p-8 shadow-xl border border-blue-600/50 flex flex-col gap-6">
+        {/* Two-column split, per the reference layouts: the whole pitch —
+            eyebrow, headline, subtitle, price and both CTAs — reads down the
+            left, and the benefits sit as a checkmark list on the right. The
+            earlier six-cell benefit grid pushed the CTA far down the card and
+            made five equal-weight tiles compete with each other; this puts a
+            single reading order back in and lets the offer close on the left
+            while the list simply substantiates it. */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-8 lg:gap-12 items-center">
+          {/* LEFT — the offer */}
+          <div className="space-y-5">
+            <SectionLabel {...parseSectionLabel(t.priorityEyebrow)} tone="amber" />
+
+            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight leading-[1.12]">
               {t.priorityTitle}
             </h3>
+
             <p className="text-zinc-300 text-xs sm:text-sm leading-relaxed font-sans max-w-xl">
               {t.priorityPitch}
             </p>
-          </div>
 
-          <div className="shrink-0 w-full md:w-64 rounded-xl border border-white/15 bg-white/5 p-5 space-y-3 text-center">
-            <div>
-              <p className="text-3xl sm:text-4xl font-extrabold tracking-tight">{t.priorityPrice}</p>
-              <p className="text-[10px] font-mono uppercase tracking-widest text-zinc-400 mt-1">
-                {t.priorityPriceNote}
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                track('priority_line_cta_click', { source: 'contact_section' });
-                openPriorityLineModal();
-              }}
-              className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-amber-500 hover:bg-amber-600 text-zinc-950 font-mono text-[11px] font-bold uppercase tracking-wider rounded-xl transition-colors"
-            >
-              <Zap className="w-3.5 h-3.5" />
-              {t.priorityCta}
-            </button>
-            <p className="text-[10px] leading-snug text-zinc-400">{t.priorityCtaNote}</p>
-          </div>
-        </div>
-
-        <ul className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {[t.priorityBullet1, t.priorityBullet2, t.priorityBullet3].map((text, i) => (
-            <li key={i} className="flex items-start gap-2 rounded-lg bg-white/5 border border-white/10 p-3">
-              <span className="mt-0.5 h-4 w-4 shrink-0 rounded-full bg-amber-500/15 text-amber-400 flex items-center justify-center">
-                <Check className="w-2.5 h-2.5" />
+            <div className="flex items-end gap-3 pt-1">
+              <span className="text-4xl sm:text-5xl font-extrabold tracking-tight leading-none">
+                {t.priorityPrice}
               </span>
-              <span className="text-[11px] sm:text-xs text-zinc-200 leading-snug">{text}</span>
-            </li>
-          ))}
-        </ul>
+              <span className="text-[10px] font-display font-semibold uppercase tracking-[0.18em] text-zinc-400 pb-1.5">
+                {t.priorityPriceNote}
+              </span>
+            </div>
 
-        {/* Secondary, smaller — email only. The phone number was intentionally
-            dropped: a free direct line to Boris undercuts the paid Priority
-            Line above it now that talking to him is the thing being
-            monetized. Email stays as a low-stakes written-inquiry channel,
-            not a live conversation. */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-lg border border-white/10 bg-black/10 p-3 sm:p-3.5">
-          <div className="text-[11px] text-zinc-300 leading-snug">
-            <span className="font-mono uppercase tracking-wide text-zinc-400">{t.secureLine}</span>
-            {' — '}
-            <span className="font-bold text-white">Boris Vchkov</span>{' '}
-            <span className="text-zinc-400">({t.ownerDesk})</span>
+            <div className="flex flex-col sm:flex-row gap-3 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  track('priority_line_cta_click', { source: 'contact_section' });
+                  openPriorityLineModal();
+                }}
+                className="btn-shine cta-premium inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-b from-amber-400 to-amber-600 hover:from-amber-400 hover:to-amber-605 text-zinc-950 font-display text-sm font-semibold tracking-[0.01em] rounded-xl transition-all shadow-lg shadow-amber-900/30 border border-amber-600/50"
+              >
+                <Zap className="w-4 h-4 shrink-0" />
+                {t.priorityCta}
+              </button>
+
+              {/* Secondary action, matching the reference pair. Scrolls to the
+                  terms and opens them rather than going anywhere — there is no
+                  separate Priority Line page to link to. */}
+              <button
+                type="button"
+                onClick={() => {
+                  setPriorityLegalOpen(true);
+                  document
+                    .getElementById('priority-legal')
+                    ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }}
+                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white/10 hover:bg-white/15 text-white font-display text-sm font-semibold tracking-[0.01em] rounded-xl transition-colors border border-white/20"
+              >
+                {t.priorityLegalTitle}
+              </button>
+            </div>
+
+            <p className="text-[11px] leading-snug text-zinc-400 max-w-md">{t.priorityCtaNote}</p>
           </div>
-          <div className="flex flex-wrap gap-2 shrink-0">
-            <a
-              href="mailto:contact@a25.mk"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white font-mono text-[10px] font-bold uppercase tracking-wide rounded-lg transition-colors"
-            >
-              <Mail className="w-3 h-3" />
-              <span>contact@a25.mk</span>
-            </a>
+
+          {/* RIGHT — what you actually get */}
+          <div className="rounded-2xl border border-white/12 bg-white/[0.06] p-6 sm:p-7 space-y-4">
+            <p className="text-xs sm:text-sm font-display font-semibold text-white/90">
+              {t.priorityFeaturesIntro}
+            </p>
+
+            <ul data-reveal-group className="space-y-3.5">
+              {[
+                { icon: Zap, title: t.priorityFeature1Title, desc: t.priorityFeature1Desc },
+                { icon: MessageSquare, title: t.priorityFeature2Title, desc: t.priorityFeature2Desc },
+                { icon: Timer, title: t.priorityFeature3Title, desc: t.priorityFeature3Desc },
+                { icon: UserCog, title: t.priorityFeature4Title, desc: t.priorityFeature4Desc },
+                { icon: PhoneCall, title: t.priorityFeature5Title, desc: t.priorityFeature5Desc },
+              ].map(({ icon: Icon, title, desc }, i) => (
+                <li key={i} className="flex items-start gap-3">
+                  <span className="mt-0.5 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/25">
+                    <Icon className="w-3 h-3" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-xs sm:text-sm font-display font-semibold text-white leading-snug">
+                      {title}
+                    </span>
+                    <span className="block text-[11px] text-zinc-300/85 leading-relaxed mt-0.5">
+                      {desc}
+                    </span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+
+            <p className="text-[11px] sm:text-xs text-amber-50/85 leading-relaxed border-t border-white/10 pt-4">
+              {t.priorityValueLine}
+            </p>
           </div>
         </div>
+
+        {/* Terms, collapsed by default. These are the honest limits of a paid
+            service (no visa/placement guarantee, refunds once activated), so
+            they stay on the card itself — one click away, never removed. */}
+        <div id="priority-legal" className="rounded-lg border border-white/10 bg-black/15 overflow-hidden">
+          <button
+            type="button"
+            onClick={() => setPriorityLegalOpen((open) => !open)}
+            aria-expanded={priorityLegalOpen}
+            aria-controls="priority-legal-panel"
+            className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left transition-colors hover:bg-white/5"
+          >
+            <span className="inline-flex items-center gap-2 text-[11px] sm:text-xs font-display font-semibold uppercase tracking-[0.14em] text-zinc-300">
+              <Info className="w-3.5 h-3.5 text-amber-500/80 shrink-0" />
+              {t.priorityLegalTitle}
+            </span>
+            <ChevronDown
+              className={`w-4 h-4 text-zinc-400 shrink-0 transition-transform duration-300 ${
+                priorityLegalOpen ? 'rotate-180' : ''
+              }`}
+            />
+          </button>
+
+          <AnimatePresence initial={false}>
+            {priorityLegalOpen && (
+              <motion.div
+                id="priority-legal-panel"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                className="overflow-hidden"
+              >
+                <div className="px-4 pb-4 pt-1 space-y-2.5 border-t border-white/10">
+                  {[t.priorityLegal1, t.priorityLegal2].map((para, i) => (
+                    <p
+                      key={i}
+                      className="text-[11px] text-zinc-400 leading-relaxed pl-3 border-l border-white/10"
+                    >
+                      {para}
+                    </p>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* The "Secure Executive Line — Boris Vchkov" band that used to sit here
+            was removed to shorten the card. Its email link is not lost: the
+            same address is in the site footer, and Boris himself is now a named
+            benefit in the list above rather than a separate footer strip. */}
       </div>
 
       {/* Symmetrical Two-Column Sourcing Portal Inputs */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 items-start reveal">
+      <div data-reveal-group className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 items-start">
         {/* COLUMN A: LOOKING TO HIRE (Employer Form) */}
         <div
           className={`card-glass border transition-all duration-500 ease-out rounded-3xl overflow-hidden flex flex-col ${

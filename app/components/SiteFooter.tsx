@@ -35,12 +35,12 @@ export default function SiteFooter() {
           </div>
           <span className="block text-[11px] text-zinc-300 font-normal">© 2026 A25 Agency. All rights reserved.</span>
           <a
-            href="https://blancographics.xyz"
+            href="https://novafaber.com"
             target="_blank"
             rel="noopener noreferrer"
             className="block text-[10px] text-zinc-400 hover:text-white transition-colors mt-1"
           >
-            MADE BY APEX SOLUTIONS
+            MADE BY NOVAFABER
           </a>
         </div>
       </div>

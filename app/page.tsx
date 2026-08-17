@@ -8,15 +8,32 @@ import ContactSection from './components/ContactSection';
 import ChatWidget from './components/ChatWidget';
 import PriorityLineModal from './components/PriorityLineModal';
 import SiteFooter from './components/SiteFooter';
+import FaqSection from './components/seo/FaqSection';
 
 // Home-route metadata. The default English copy is what crawlers see in the
 // server-rendered HTML (the client-side language switcher only changes the
 // view after hydration).
 export const metadata: Metadata = {
-  title: 'A25 — Bilateral Workforce Sourcing for North Macedonian Employers',
+  title: {
+    absolute: 'North Macedonia Workforce Agency — Hire Workers from Nepal | A25',
+  },
   description:
-    'Hire vetted seasonal and permanent workers, or register as a candidate. A25 runs bilateral recruitment pathways across 7 industries — construction, agriculture, hospitality, manufacturing, logistics and more.',
+    'Licensed North Macedonia workforce agency. A25 helps Macedonian companies hire vetted workers from Nepal and Asia — work permits, visas and accommodation handled — across construction, hospitality, agriculture, manufacturing and logistics.',
+  keywords: [
+    'North Macedonia workforce agency',
+    'Macedonia workforce',
+    'hire workers from Nepal',
+    'Nepal workforce',
+    'Macedonian jobs',
+    'workers from Nepal to North Macedonia',
+  ],
   alternates: { canonical: '/' },
+  openGraph: {
+    title: 'North Macedonia Workforce Agency — Hire Workers from Nepal | A25',
+    description:
+      'A25 helps Macedonian companies hire vetted workers from Nepal and Asia — permits, visas and housing handled.',
+    url: '/',
+  },
 };
 
 export default function HomePage() {
@@ -35,6 +52,9 @@ export default function HomePage() {
 
         {/* ==================== SCROLL AREA 2: DIRECT CONTACT CHANNELS ==================== */}
         <ContactSection />
+
+        {/* ==================== SCROLL AREA 3: SEO / FAQ (server-rendered) ==================== */}
+        <FaqSection />
       </main>
 
       <ChatWidget />
